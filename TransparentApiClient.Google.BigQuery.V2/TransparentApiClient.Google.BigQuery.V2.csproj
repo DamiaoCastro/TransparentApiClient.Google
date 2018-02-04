@@ -6,7 +6,15 @@
 
   <ItemGroup>
     <PackageReference Include="Google.Apis.Auth" Version="1.32.1" />
+    <PackageReference Include="Google.Apis.Bigquery.v2" Version="1.32.1.1107" />
     <PackageReference Include="Newtonsoft.Json" Version="10.0.3" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Datasets\" />
+    <Folder Include="Jobs\" />
+    <Folder Include="Tables\" />
+    <Folder Include="Projects\" />
   </ItemGroup>
 
 </Project>

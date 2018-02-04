@@ -286,3 +286,4 @@ __pycache__/
 *.btm.cs
 *.odx.cs
 *.xsd.cs
+/TransparentApiClient.Google.BigQuery.V2.TestApplication/credencials.json

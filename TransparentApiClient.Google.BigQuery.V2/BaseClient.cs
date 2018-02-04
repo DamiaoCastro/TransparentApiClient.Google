@@ -1,6 +1,8 @@
 ﻿using Google.Apis.Auth.OAuth2;
 using Newtonsoft.Json;
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Threading;
@@ -11,13 +13,15 @@ namespace TransparentApiClient.Google.BigQuery.V2 {
 
         private readonly byte[] serviceAccountCredentials;
         private readonly string projectId;
+        private readonly IEnumerable<string> addicionalScopes;
         private HttpClient httpClient = null;
 
-        public BaseClient(byte[] serviceAccountCredentials, string projectId) {
+        public BaseClient(byte[] serviceAccountCredentials, string projectId, IEnumerable<string> addicionalScopes) {
             if (string.IsNullOrWhiteSpace(projectId)) { throw new ArgumentNullException(nameof(projectId)); }
 
             this.serviceAccountCredentials = serviceAccountCredentials ?? throw new ArgumentNullException(nameof(serviceAccountCredentials));
             this.projectId = projectId;
+            this.addicionalScopes = addicionalScopes;
         }
 
         protected Task<HttpResponseMessage> SendAsync(HttpMethod httpMethod, string partialUri, object requestBodyObject = null, CancellationToken cancellationToken = default(CancellationToken)) {
@@ -38,6 +42,29 @@ namespace TransparentApiClient.Google.BigQuery.V2 {
             return _httpClient.SendAsync(request, cancellationToken);
         }
 
+        protected Task<BaseResponse<T>> HandleBaseResponse<T>(Task<HttpResponseMessage> sendTask) {
+
+            var response = sendTask.Result;
+
+            var baseResponse = new BaseResponse<T>() { Success = false };
+            baseResponse.ResponseCode = response.StatusCode;
+
+            if (response.IsSuccessStatusCode) {
+                baseResponse.Success = true;
+
+                return response.Content.ReadAsStringAsync()
+                    .ContinueWith((readTask) => {
+
+                        string responseBody = readTask.Result;
+                        baseResponse.Response = JsonConvert.DeserializeObject<T>(responseBody);
+
+                        return baseResponse;
+                    });
+            }
+
+            return Task.FromResult(baseResponse);
+        }
+
         DateTime t1 = DateTime.UtcNow;
         private HttpClient GetHttpClient() {
             if ((DateTime.UtcNow - t1).TotalHours > 1)//get new http client and new credentials every hour
@@ -48,10 +75,14 @@ namespace TransparentApiClient.Google.BigQuery.V2 {
             }
 
             if (httpClient == null) {
-                var googleCredential = GoogleCredential.FromStream(new System.IO.MemoryStream(serviceAccountCredentials))
-                                            .CreateScoped(
-                                                "https://www.googleapis.com/auth/bigquery",
-                                                "https://www.googleapis.com/auth/bigquery.insertdata");
+                var scopes = new List<string>() { "https://www.googleapis.com/auth/bigquery" };
+                if (addicionalScopes != null && addicionalScopes.Any()) {
+                    scopes.AddRange(addicionalScopes);
+                }
+
+                var googleCredential = GoogleCredential
+                                            .FromStream(new System.IO.MemoryStream(serviceAccountCredentials))
+                                            .CreateScoped(scopes);
                 var accessToken = googleCredential.UnderlyingCredential.GetAccessTokenForRequestAsync().Result;
 
                 httpClient = new System.Net.Http.HttpClient();
