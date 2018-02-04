@@ -4,26 +4,29 @@ using System.Collections.Generic;
 using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
+using TransparentApiClient.Google.Core;
 
 namespace TransparentApiClient.Google.BigQuery.V2.Tabledata {
     public class TabledataClient : BaseClient {
 
-        public TabledataClient(byte[] serviceAccountCredentials, string projectId) :
-            base(serviceAccountCredentials, projectId, new string[] { "https://www.googleapis.com/auth/bigquery.insertdata" }) {
+        public TabledataClient(byte[] serviceAccountCredentials) :
+            base(serviceAccountCredentials, "https://www.googleapis.com/bigquery/v2/", new string[] { "https://www.googleapis.com/auth/bigquery", "https://www.googleapis.com/auth/bigquery.insertdata" }) {
         }
 
         /// <summary>
         /// https://cloud.google.com/bigquery/docs/reference/rest/v2/tabledata/insertAll
         /// </summary>
-        /// <param name="datasetId">Dataset ID of the table to read</param>
-        /// <param name="tableId">Table ID of the table to read</param>
+        /// <param name="projectId">Project ID of the destination table.</param>
+        /// <param name="datasetId">Dataset ID of the destination table.</param>
+        /// <param name="tableId">Table ID of the destination table.</param>
         /// <returns></returns>
-        public Task<BaseResponse<InsertAllResponse>> InsertAllAsync(string datasetId, string tableId, InsertAllRequest requestBody, CancellationToken cancellationToken) {
+        public Task<BaseResponse<InsertAllResponse>> InsertAllAsync(string projectId, string datasetId, string tableId, InsertAllRequest requestBody, CancellationToken cancellationToken) {
+            if (string.IsNullOrWhiteSpace(projectId)) { throw new ArgumentNullException(nameof(projectId)); }
             if (string.IsNullOrWhiteSpace(datasetId)) { throw new ArgumentNullException(nameof(datasetId)); }
             if (string.IsNullOrWhiteSpace(tableId)) { throw new ArgumentNullException(nameof(tableId)); }
             if (requestBody == null) { throw new ArgumentNullException(nameof(requestBody)); }
 
-            return SendAsync(HttpMethod.Post, $"datasets/{datasetId}/tables/{tableId}/insertAll", requestBody, cancellationToken)
+            return SendAsync(HttpMethod.Post, $"projects/{projectId}/datasets/{datasetId}/tables/{tableId}/insertAll", requestBody, cancellationToken)
                 .ContinueWith(HandleBaseResponse<InsertAllResponse>, cancellationToken)
                 .Unwrap();
 
@@ -32,6 +35,7 @@ namespace TransparentApiClient.Google.BigQuery.V2.Tabledata {
         /// <summary>
         /// https://cloud.google.com/bigquery/docs/reference/rest/v2/tabledata/list
         /// </summary>
+        /// <param name="projectId">Project ID of the table to read</param>
         /// <param name="datasetId">Dataset ID of the table to read</param>
         /// <param name="tableId">Table ID of the table to read</param>
         /// <param name="maxResults">Maximum number of results to return</param>
@@ -40,6 +44,7 @@ namespace TransparentApiClient.Google.BigQuery.V2.Tabledata {
         /// <param name="startIndex">Zero-based index of the starting row to read</param>
         /// <returns></returns>
         public Task<BaseResponse<ListResponse>> ListAsync(
+                string projectId,
                 string datasetId,
                 string tableId,
                 uint? maxResults,
@@ -48,10 +53,11 @@ namespace TransparentApiClient.Google.BigQuery.V2.Tabledata {
                 uint? startIndex,
                 CancellationToken cancellationToken) {
 
+            if (string.IsNullOrWhiteSpace(projectId)) { throw new ArgumentNullException(nameof(projectId)); }
             if (string.IsNullOrWhiteSpace(datasetId)) { throw new ArgumentNullException(nameof(datasetId)); }
             if (string.IsNullOrWhiteSpace(tableId)) { throw new ArgumentNullException(nameof(tableId)); }
 
-            return SendAsync(HttpMethod.Get, $"datasets/{datasetId}/tables/{tableId}/data?{ListQueryContruct(maxResults, pageToken, selectedFields, startIndex)}", null, cancellationToken)
+            return SendAsync(HttpMethod.Get, $"projects/{projectId}/datasets/{datasetId}/tables/{tableId}/data?{ListQueryContruct(maxResults, pageToken, selectedFields, startIndex)}", null, cancellationToken)
                 .ContinueWith(HandleBaseResponse<ListResponse>, cancellationToken)
                 .Unwrap();
 

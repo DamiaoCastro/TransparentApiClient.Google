@@ -3,9 +3,15 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.27130.2027
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TransparentApiClient.Google.BigQuery.V2", "TransparentApiClient.Google.BigQuery.V2\TransparentApiClient.Google.BigQuery.V2.csproj", "{B897D5C6-C5E9-4D50-8B62-F119D8331BEA}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TransparentApiClient.Google.BigQuery.V2", "TransparentApiClient.Google.BigQuery.V2\TransparentApiClient.Google.BigQuery.V2.csproj", "{B897D5C6-C5E9-4D50-8B62-F119D8331BEA}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TransparentApiClient.Google.BigQuery.V2.TestApplication", "TransparentApiClient.Google.BigQuery.V2.TestApplication\TransparentApiClient.Google.BigQuery.V2.TestApplication.csproj", "{47230FDC-0BBE-4800-B053-D77D5C54F06B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TransparentApiClient.Google.BigQuery.V2.TestApplication", "TransparentApiClient.Google.BigQuery.V2.TestApplication\TransparentApiClient.Google.BigQuery.V2.TestApplication.csproj", "{47230FDC-0BBE-4800-B053-D77D5C54F06B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TransparentApiClient.Google.PubSub.V1", "TransparentApiClient.Google.PubSub.V1\TransparentApiClient.Google.PubSub.V1.csproj", "{3C48E6BA-414E-41B6-961D-AD8FB218FC17}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TransparentApiClient.Google.Core", "TransparentApiClient.Google.Core\TransparentApiClient.Google.Core.csproj", "{AC74140E-C7E1-4CF3-9717-3CFA87EB7DA5}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "TestApplications", "TestApplications", "{033ABA6E-2BB9-4B54-947E-05966969DD8A}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,9 +27,20 @@ Global
 		{47230FDC-0BBE-4800-B053-D77D5C54F06B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{47230FDC-0BBE-4800-B053-D77D5C54F06B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{47230FDC-0BBE-4800-B053-D77D5C54F06B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3C48E6BA-414E-41B6-961D-AD8FB218FC17}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3C48E6BA-414E-41B6-961D-AD8FB218FC17}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3C48E6BA-414E-41B6-961D-AD8FB218FC17}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3C48E6BA-414E-41B6-961D-AD8FB218FC17}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AC74140E-C7E1-4CF3-9717-3CFA87EB7DA5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AC74140E-C7E1-4CF3-9717-3CFA87EB7DA5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AC74140E-C7E1-4CF3-9717-3CFA87EB7DA5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AC74140E-C7E1-4CF3-9717-3CFA87EB7DA5}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{47230FDC-0BBE-4800-B053-D77D5C54F06B} = {033ABA6E-2BB9-4B54-947E-05966969DD8A}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {7B134FB0-C993-4F1C-B134-D0E51215B43F}

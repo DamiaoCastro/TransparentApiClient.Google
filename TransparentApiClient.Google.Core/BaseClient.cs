@@ -2,26 +2,25 @@
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace TransparentApiClient.Google.BigQuery.V2 {
+namespace TransparentApiClient.Google.Core {
     public abstract class BaseClient : IDisposable {
 
         private readonly byte[] serviceAccountCredentials;
-        private readonly string projectId;
-        private readonly IEnumerable<string> addicionalScopes;
+        private readonly string baseUri;
+        private readonly IEnumerable<string> scopes;
         private HttpClient httpClient = null;
 
-        public BaseClient(byte[] serviceAccountCredentials, string projectId, IEnumerable<string> addicionalScopes) {
-            if (string.IsNullOrWhiteSpace(projectId)) { throw new ArgumentNullException(nameof(projectId)); }
-
+        public BaseClient(byte[] serviceAccountCredentials, string baseUri, IEnumerable<string> scopes) {
             this.serviceAccountCredentials = serviceAccountCredentials ?? throw new ArgumentNullException(nameof(serviceAccountCredentials));
-            this.projectId = projectId;
-            this.addicionalScopes = addicionalScopes;
+            if (string.IsNullOrWhiteSpace(baseUri)) { throw new ArgumentNullException(nameof(baseUri)); }
+            this.scopes = scopes ?? throw new ArgumentNullException(nameof(scopes));
+
+            this.baseUri = baseUri;
         }
 
         protected Task<HttpResponseMessage> SendAsync(HttpMethod httpMethod, string partialUri, object requestBodyObject = null, CancellationToken cancellationToken = default(CancellationToken)) {
@@ -33,11 +32,7 @@ namespace TransparentApiClient.Google.BigQuery.V2 {
                 content = new StringContent(JsonConvert.SerializeObject(requestBodyObject), System.Text.Encoding.UTF8, "application/json");
             }
 
-            var request = new HttpRequestMessage() {
-                RequestUri = new Uri($"https://www.googleapis.com/bigquery/v2/projects/{projectId}/{partialUri}"),
-                Method = httpMethod,
-                Content = content
-            };
+            var request = new HttpRequestMessage() { RequestUri = new Uri($"{baseUri}{partialUri}"), Method = httpMethod, Content = content };
 
             return _httpClient.SendAsync(request, cancellationToken);
         }
@@ -75,14 +70,7 @@ namespace TransparentApiClient.Google.BigQuery.V2 {
             }
 
             if (httpClient == null) {
-                var scopes = new List<string>() { "https://www.googleapis.com/auth/bigquery" };
-                if (addicionalScopes != null && addicionalScopes.Any()) {
-                    scopes.AddRange(addicionalScopes);
-                }
-
-                var googleCredential = GoogleCredential
-                                            .FromStream(new System.IO.MemoryStream(serviceAccountCredentials))
-                                            .CreateScoped(scopes);
+                var googleCredential = GoogleCredential.FromStream(new System.IO.MemoryStream(serviceAccountCredentials)).CreateScoped(scopes);
                 var accessToken = googleCredential.UnderlyingCredential.GetAccessTokenForRequestAsync().Result;
 
                 httpClient = new System.Net.Http.HttpClient();

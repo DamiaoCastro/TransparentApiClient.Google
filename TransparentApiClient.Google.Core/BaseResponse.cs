@@ -1,9 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Net;
-using System.Text;
+﻿using System.Net;
 
-namespace TransparentApiClient.Google.BigQuery.V2 {
+namespace TransparentApiClient.Google.Core {
     public class BaseResponse<S> {
 
         public bool Success { get; set; }

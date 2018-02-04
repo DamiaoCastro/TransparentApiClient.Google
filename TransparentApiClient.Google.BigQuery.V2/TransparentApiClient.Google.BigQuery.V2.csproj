@@ -13,15 +13,14 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Google.Apis.Auth" Version="1.32.1" />
-    <PackageReference Include="Newtonsoft.Json" Version="10.0.3" />
-  </ItemGroup>
-
-  <ItemGroup>
     <Folder Include="Datasets\" />
     <Folder Include="Jobs\" />
     <Folder Include="Tables\" />
     <Folder Include="Projects\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\TransparentApiClient.Google.Core\TransparentApiClient.Google.Core.csproj" />
   </ItemGroup>
 
 </Project>
