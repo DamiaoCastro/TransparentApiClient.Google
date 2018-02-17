@@ -7,11 +7,15 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TransparentApiClient.Google
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TransparentApiClient.Google.BigQuery.V2.TestApplication", "TransparentApiClient.Google.BigQuery.V2.TestApplication\TransparentApiClient.Google.BigQuery.V2.TestApplication.csproj", "{47230FDC-0BBE-4800-B053-D77D5C54F06B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TransparentApiClient.Google.PubSub.V1", "TransparentApiClient.Google.PubSub.V1\TransparentApiClient.Google.PubSub.V1.csproj", "{3C48E6BA-414E-41B6-961D-AD8FB218FC17}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TransparentApiClient.Google.PubSub.V1", "TransparentApiClient.Google.PubSub.V1\TransparentApiClient.Google.PubSub.V1.csproj", "{3C48E6BA-414E-41B6-961D-AD8FB218FC17}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TransparentApiClient.Google.Core", "TransparentApiClient.Google.Core\TransparentApiClient.Google.Core.csproj", "{AC74140E-C7E1-4CF3-9717-3CFA87EB7DA5}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TransparentApiClient.Google.Core", "TransparentApiClient.Google.Core\TransparentApiClient.Google.Core.csproj", "{AC74140E-C7E1-4CF3-9717-3CFA87EB7DA5}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "TestApplications", "TestApplications", "{033ABA6E-2BB9-4B54-947E-05966969DD8A}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tooling", "Tooling", "{ADFB82CC-D61A-4969-B61B-09A910071C05}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TransparentApiClient.Google.SchemasFileGenerator", "TransparentApiClient.Google.SchemasFileGenerator\TransparentApiClient.Google.SchemasFileGenerator.csproj", "{757C8E87-B824-4EA9-8410-B29E7F7BA6A7}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -35,12 +39,17 @@ Global
 		{AC74140E-C7E1-4CF3-9717-3CFA87EB7DA5}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{AC74140E-C7E1-4CF3-9717-3CFA87EB7DA5}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{AC74140E-C7E1-4CF3-9717-3CFA87EB7DA5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{757C8E87-B824-4EA9-8410-B29E7F7BA6A7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{757C8E87-B824-4EA9-8410-B29E7F7BA6A7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{757C8E87-B824-4EA9-8410-B29E7F7BA6A7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{757C8E87-B824-4EA9-8410-B29E7F7BA6A7}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{47230FDC-0BBE-4800-B053-D77D5C54F06B} = {033ABA6E-2BB9-4B54-947E-05966969DD8A}
+		{757C8E87-B824-4EA9-8410-B29E7F7BA6A7} = {ADFB82CC-D61A-4969-B61B-09A910071C05}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {7B134FB0-C993-4F1C-B134-D0E51215B43F}

@@ -15,6 +15,7 @@
   <ItemGroup>
     <Folder Include="Datasets\" />
     <Folder Include="Jobs\" />
+    <Folder Include="Schema\" />
     <Folder Include="Tables\" />
     <Folder Include="Projects\" />
   </ItemGroup>
