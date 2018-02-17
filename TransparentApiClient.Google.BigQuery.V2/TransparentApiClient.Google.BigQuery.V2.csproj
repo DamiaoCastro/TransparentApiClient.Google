@@ -13,11 +13,8 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="Datasets\" />
-    <Folder Include="Jobs\" />
+    <Folder Include="Resources\" />
     <Folder Include="Schema\" />
-    <Folder Include="Tables\" />
-    <Folder Include="Projects\" />
   </ItemGroup>
 
   <ItemGroup>

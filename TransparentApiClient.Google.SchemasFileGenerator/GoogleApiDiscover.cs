@@ -32,5 +32,15 @@ namespace TransparentApiClient.Google.SchemasFileGenerator {
         public string x16 { get; set; }
         public string x32 { get; set; }
     }
+
+    public class GoogleApiDiscoverMethod {
+        public string id { get; set; }
+        public string path { get; set; }
+        public string httpMethod { get; set; }
+        public string description { get; set; }
+        public JObject parameters { get; set; }
+        public string[] parameterOrder { get; set; }
+        public string[] scopes { get; set; }
+    }
     
 }
