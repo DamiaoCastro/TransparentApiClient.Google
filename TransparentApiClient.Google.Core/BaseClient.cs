@@ -2,6 +2,7 @@
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Threading;
@@ -58,6 +59,17 @@ namespace TransparentApiClient.Google.Core {
             }
 
             return Task.FromResult(baseResponse);
+        }
+
+        protected string GetQueryString(object parameters) {
+
+            var queryParameters = from c in parameters.GetType().GetProperties()
+                                  let value = c.GetValue(parameters)
+                                  where value != null
+                                  select $"{c.Name}={Uri.EscapeUriString($"{value}")}";
+
+            var quertString = $"{string.Join("&", queryParameters)}";
+            return quertString;
         }
 
         DateTime t1 = DateTime.UtcNow;

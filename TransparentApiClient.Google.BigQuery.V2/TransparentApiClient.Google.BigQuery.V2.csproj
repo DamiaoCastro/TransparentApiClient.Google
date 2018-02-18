@@ -13,6 +13,12 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Tabledata\**" />
+    <EmbeddedResource Remove="Tabledata\**" />
+    <None Remove="Tabledata\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Folder Include="Resources\" />
     <Folder Include="Schema\" />
   </ItemGroup>

@@ -1,4 +1,6 @@
-using System.Threading;using System.Net.Http;
+using System;
+using System.Threading;
+using System.Net.Http;
 using System.Threading.Tasks;
 using TransparentApiClient.Google.Core;
 
@@ -7,73 +9,106 @@ namespace TransparentApiClient.Google.BigQuery.V2.Resources {
 	public class Jobs : BaseClient {
 
 		public Jobs(byte[] serviceAccountCredentials)
-		    : base(serviceAccountCredentials, "", new string[] { }) {
+		    : base(serviceAccountCredentials, "https://www.googleapis.com/bigquery/v2/",
+		    		new string[] {"https://www.googleapis.com/auth/bigquery","https://www.googleapis.com/auth/cloud-platform","https://www.googleapis.com/auth/cloud-platform.read-only","https://www.googleapis.com/auth/devstorage.full_control","https://www.googleapis.com/auth/devstorage.read_only","https://www.googleapis.com/auth/devstorage.read_write"}) {
 		}
 
 		/// <summary>
 		/// Requests that a job be cancelled. This call will return immediately, and the client will need to poll for the job status to see if the cancel completed successfully. Cancelled jobs may still incur costs.
 		/// </summary>
-		public Task<BaseResponse<object>> CancelAsync(string jobId, string projectId, CancellationToken cancellationToken) {
+		/// <param name="jobId">[Required] Job ID of the job to cancel</param>
+		/// <param name="projectId">[Required] Project ID of the job to cancel</param>
+		/// <param name="location">[Experimental] The geographic location of the job. Required except for US and EU.</param>
+		public Task<BaseResponse<Schema.JobCancelResponse>> CancelAsync(string jobId, string projectId, string location, CancellationToken cancellationToken) {
+			if (string.IsNullOrWhiteSpace(jobId)) { throw new ArgumentNullException(nameof(jobId)); }
+			if (string.IsNullOrWhiteSpace(projectId)) { throw new ArgumentNullException(nameof(projectId)); }
 
-			return SendAsync(HttpMethod.Post, $"projects/{projectId}/jobs/{jobId}/cancel", null, cancellationToken)
-				.ContinueWith(HandleBaseResponse<object>, cancellationToken)
+			string queryString = GetQueryString(new {location});
+
+			return SendAsync(HttpMethod.Post, $"projects/{projectId}/jobs/{jobId}/cancel?{queryString}", null, cancellationToken)
+				.ContinueWith(HandleBaseResponse<Schema.JobCancelResponse>, cancellationToken)
 				.Unwrap();
-
 		}
 
 		/// <summary>
 		/// Returns information about a specific job. Job information is available for a six month period after creation. Requires that you're the person who ran the job, or have the Is Owner project role.
 		/// </summary>
-		public Task<BaseResponse<object>> GetAsync(string jobId, string projectId, CancellationToken cancellationToken) {
+		/// <param name="jobId">[Required] Job ID of the requested job</param>
+		/// <param name="projectId">[Required] Project ID of the requested job</param>
+		/// <param name="location">[Experimental] The geographic location of the job. Required except for US and EU.</param>
+		public Task<BaseResponse<Schema.Job>> GetAsync(string jobId, string projectId, string location, CancellationToken cancellationToken) {
+			if (string.IsNullOrWhiteSpace(jobId)) { throw new ArgumentNullException(nameof(jobId)); }
+			if (string.IsNullOrWhiteSpace(projectId)) { throw new ArgumentNullException(nameof(projectId)); }
 
-			return SendAsync(HttpMethod.Post, $"projects/{projectId}/jobs/{jobId}", null, cancellationToken)
-				.ContinueWith(HandleBaseResponse<object>, cancellationToken)
+			string queryString = GetQueryString(new {location});
+
+			return SendAsync(HttpMethod.Get, $"projects/{projectId}/jobs/{jobId}?{queryString}", null, cancellationToken)
+				.ContinueWith(HandleBaseResponse<Schema.Job>, cancellationToken)
 				.Unwrap();
-
 		}
 
 		/// <summary>
 		/// Retrieves the results of a query job.
 		/// </summary>
-		public Task<BaseResponse<object>> GetQueryResultsAsync(string jobId, string projectId, CancellationToken cancellationToken) {
+		/// <param name="jobId">[Required] Job ID of the query job</param>
+		/// <param name="projectId">[Required] Project ID of the query job</param>
+		/// <param name="location">[Experimental] The geographic location where the job should run. Required except for US and EU.</param>
+		/// <param name="maxResults">Maximum number of results to read</param>
+		/// <param name="pageToken">Page token, returned by a previous call, to request the next page of results</param>
+		/// <param name="startIndex">Zero-based index of the starting row</param>
+		/// <param name="timeoutMs">How long to wait for the query to complete, in milliseconds, before returning. Default is 10 seconds. If the timeout passes before the job completes, the 'jobComplete' field in the response will be false</param>
+		public Task<BaseResponse<Schema.GetQueryResultsResponse>> GetQueryResultsAsync(string jobId, string projectId, string location, int? maxResults, string pageToken, string startIndex, int? timeoutMs, CancellationToken cancellationToken) {
+			if (string.IsNullOrWhiteSpace(jobId)) { throw new ArgumentNullException(nameof(jobId)); }
+			if (string.IsNullOrWhiteSpace(projectId)) { throw new ArgumentNullException(nameof(projectId)); }
 
-			return SendAsync(HttpMethod.Post, $"projects/{projectId}/queries/{jobId}", null, cancellationToken)
-				.ContinueWith(HandleBaseResponse<object>, cancellationToken)
+			string queryString = GetQueryString(new {location, maxResults, pageToken, startIndex, timeoutMs});
+
+			return SendAsync(HttpMethod.Get, $"projects/{projectId}/queries/{jobId}?{queryString}", null, cancellationToken)
+				.ContinueWith(HandleBaseResponse<Schema.GetQueryResultsResponse>, cancellationToken)
 				.Unwrap();
-
 		}
 
 		/// <summary>
 		/// Starts a new asynchronous job. Requires the Can View project role.
 		/// </summary>
-		public Task<BaseResponse<object>> InsertAsync(string projectId, CancellationToken cancellationToken) {
+		/// <param name="projectId">Project ID of the project that will be billed for the job</param>
+		public Task<BaseResponse<Schema.Job>> InsertAsync(string projectId, Schema.Job Job, CancellationToken cancellationToken) {
+			if (string.IsNullOrWhiteSpace(projectId)) { throw new ArgumentNullException(nameof(projectId)); }
 
-			return SendAsync(HttpMethod.Post, $"projects/{projectId}/jobs", null, cancellationToken)
-				.ContinueWith(HandleBaseResponse<object>, cancellationToken)
+			return SendAsync(HttpMethod.Post, $"projects/{projectId}/jobs", Job, cancellationToken)
+				.ContinueWith(HandleBaseResponse<Schema.Job>, cancellationToken)
 				.Unwrap();
-
 		}
 
 		/// <summary>
 		/// Lists all jobs that you started in the specified project. Job information is available for a six month period after creation. The job list is sorted in reverse chronological order, by job creation time. Requires the Can View project role, or the Is Owner project role if you set the allUsers property.
 		/// </summary>
-		public Task<BaseResponse<object>> ListAsync(string projectId, CancellationToken cancellationToken) {
+		/// <param name="projectId">Project ID of the jobs to list</param>
+		/// <param name="allUsers">Whether to display jobs owned by all users in the project. Default false</param>
+		/// <param name="maxResults">Maximum number of results to return</param>
+		/// <param name="pageToken">Page token, returned by a previous call, to request the next page of results</param>
+		/// <param name="projection">Restrict information returned to a set of selected fields</param>
+		/// <param name="stateFilter">Filter for job state</param>
+		public Task<BaseResponse<Schema.JobList>> ListAsync(string projectId, bool? allUsers, int? maxResults, string pageToken, string projection, string stateFilter, CancellationToken cancellationToken) {
+			if (string.IsNullOrWhiteSpace(projectId)) { throw new ArgumentNullException(nameof(projectId)); }
 
-			return SendAsync(HttpMethod.Post, $"projects/{projectId}/jobs", null, cancellationToken)
-				.ContinueWith(HandleBaseResponse<object>, cancellationToken)
+			string queryString = GetQueryString(new {allUsers, maxResults, pageToken, projection, stateFilter});
+
+			return SendAsync(HttpMethod.Get, $"projects/{projectId}/jobs?{queryString}", null, cancellationToken)
+				.ContinueWith(HandleBaseResponse<Schema.JobList>, cancellationToken)
 				.Unwrap();
-
 		}
 
 		/// <summary>
 		/// Runs a BigQuery SQL query synchronously and returns query results if the query completes within a specified timeout.
 		/// </summary>
-		public Task<BaseResponse<object>> QueryAsync(string projectId, CancellationToken cancellationToken) {
+		/// <param name="projectId">Project ID of the project billed for the query</param>
+		public Task<BaseResponse<Schema.QueryResponse>> QueryAsync(string projectId, Schema.QueryRequest QueryRequest, CancellationToken cancellationToken) {
+			if (string.IsNullOrWhiteSpace(projectId)) { throw new ArgumentNullException(nameof(projectId)); }
 
-			return SendAsync(HttpMethod.Post, $"projects/{projectId}/queries", null, cancellationToken)
-				.ContinueWith(HandleBaseResponse<object>, cancellationToken)
+			return SendAsync(HttpMethod.Post, $"projects/{projectId}/queries", QueryRequest, cancellationToken)
+				.ContinueWith(HandleBaseResponse<Schema.QueryResponse>, cancellationToken)
 				.Unwrap();
-
 		}
 
 	}

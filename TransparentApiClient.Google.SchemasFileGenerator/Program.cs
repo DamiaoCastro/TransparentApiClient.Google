@@ -59,7 +59,7 @@ namespace TransparentApiClient.Google.SchemasFileGenerator {
                                 }
                             }
                         }
-                        
+
                     }).Wait();
 
                     break;
@@ -83,7 +83,8 @@ namespace TransparentApiClient.Google.SchemasFileGenerator {
 
             //string responseContent = await httpResponse.Content.ReadAsStringAsync();
             string responseContent = System.IO.File.ReadAllText("bq-api.json");
-            GoogleApiDiscover googleApiDiscover = JsonConvert.DeserializeObject<GoogleApiDiscover>(responseContent);
+            GoogleApiDiscover googleApiDiscover = JsonConvert.DeserializeObject<GoogleApiDiscover>(responseContent,
+                new JsonSerializerSettings() { MetadataPropertyHandling = MetadataPropertyHandling.Ignore });
             return Task.FromResult(googleApiDiscover);
         }
 

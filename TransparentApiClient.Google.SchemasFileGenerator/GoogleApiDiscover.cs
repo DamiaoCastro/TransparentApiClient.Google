@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json.Linq;
+﻿using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using System.Collections.Generic;
 
 namespace TransparentApiClient.Google.SchemasFileGenerator {
@@ -51,7 +52,8 @@ namespace TransparentApiClient.Google.SchemasFileGenerator {
     }
 
     internal class GoogleApiDiscoverMethodRequestResponse {
-        public string _ref { get; set; }
+        [JsonProperty("$ref")]
+        public string refName { get; set; }
     }
 
     internal class GoogleApiDiscoverMethodParameter {
