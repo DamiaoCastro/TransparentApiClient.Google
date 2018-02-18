@@ -1,5 +1,4 @@
-﻿using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
+﻿using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,21 +11,20 @@ namespace TransparentApiClient.Google.SchemasFileGenerator {
 
         internal IEnumerable<(string id, string fileContent)> GetFileContents(GoogleApiDiscover googleApiDiscover) {
 
-            foreach (JProperty schemaProperty in googleApiDiscover.resources.Children()) {
+            foreach (KeyValuePair<string, GoogleApiDiscoverResource> schemaProperty in googleApiDiscover.resources) {
 
-                Console.WriteLine($"resources property '{schemaProperty.Name}'");
+                Console.WriteLine($"resources property '{schemaProperty.Key}'");
 
                 yield return GetClassCodeString(schemaProperty);
             }
 
         }
 
-        (string id, string content) GetClassCodeString(JProperty schemaProperty) {
+        (string id, string content) GetClassCodeString(KeyValuePair<string, GoogleApiDiscoverResource> schemaProperty) {
 
-            string id = CamelCase(schemaProperty.Name);
-            var children = schemaProperty.Children().Values("methods").First();
+            string id = CamelCase(schemaProperty.Key);
 
-            string classContent = GetClassCodeString(id, children);
+            string classContent = GetClassCodeString(id, schemaProperty.Value.methods);
             if (!string.IsNullOrWhiteSpace(classContent)) {
 
                 var classGenerator = new StringBuilder("using System.Threading;");
@@ -43,10 +41,10 @@ namespace TransparentApiClient.Google.SchemasFileGenerator {
             return (id, null);
         }
 
-        private string GetClassCodeString(string id, IEnumerable<JToken> methods) {
+        private string GetClassCodeString(string id, Dictionary<string, GoogleApiDiscoverMethod> methods) {
 
             var methodsCodeList = new List<string>();
-            foreach (JToken method in methods) {
+            foreach (KeyValuePair<string, GoogleApiDiscoverMethod> method in methods) {
 
                 var methodCode = GetMethodCode(method);
                 methodsCodeList.Add(methodCode);
@@ -65,31 +63,38 @@ namespace TransparentApiClient.Google.SchemasFileGenerator {
             return classGenerator.ToString();
         }
 
-        private string GetMethodCode(JToken methodToken) {
+        private string GetMethodCode(KeyValuePair<string, GoogleApiDiscoverMethod> methodToken) {
 
-            var method = JsonConvert.DeserializeObject<GoogleApiDiscoverMethod>(methodToken.First().ToString());
+            var method = methodToken.Value;
 
             //id
             var methodName = method.id.Split(".").Last();
             methodName = CamelCase(methodName);
             //parameters
-            //parameterOrder
-            //request
-            //response
-            //scopes
-
+            var functionParams = new List<string>(GetFunctionParameters(method.parameters));
+            functionParams.Add("CancellationToken cancellationToken");
+            var parameters = string.Join(", ", functionParams);
+            
             string description = null;
             if (!string.IsNullOrWhiteSpace(method.description)) {
                 description = $"\t\t/// <summary>{newLine}\t\t/// {method.description}{newLine}\t\t/// </summary>";
             }
 
-            var methodBuilder = new StringBuilder($"\t\tpublic Task<BaseResponse<object>> {methodName}Async(CancellationToken cancellationToken) {{{newLine}");
-            methodBuilder.AppendLine($"{newLine}\t\t\treturn SendAsync(HttpMethod.Post, $\"\", null, cancellationToken)");
+            var methodBuilder = new StringBuilder($"\t\tpublic Task<BaseResponse<object>> {methodName}Async({parameters}) {{{newLine}");
+            methodBuilder.AppendLine($"{newLine}\t\t\treturn SendAsync(HttpMethod.Post, $\"{method.path}\", null, cancellationToken)");
             methodBuilder.AppendLine("\t\t\t\t.ContinueWith(HandleBaseResponse<object>, cancellationToken)");
             methodBuilder.AppendLine($"\t\t\t\t.Unwrap();");
             methodBuilder.AppendLine($"{newLine}\t\t}}");
 
             return $"{description}{newLine}{methodBuilder.ToString()}";
+        }
+
+        private IEnumerable<string> GetFunctionParameters(Dictionary<string, GoogleApiDiscoverMethodParameter> parameters) {
+            foreach (var param in parameters) {
+                if (param.Value.location == "path") {
+                    yield return $"{param.Value.type} {param.Key}";
+                }
+            }
         }
 
         private static string CamelCase(string name) {

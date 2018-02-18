@@ -13,9 +13,9 @@ namespace TransparentApiClient.Google.BigQuery.V2.Resources {
 		/// <summary>
 		/// Returns the email address of the service account for your project used for interactions with Google Cloud KMS.
 		/// </summary>
-		public Task<BaseResponse<object>> GetServiceAccountAsync(CancellationToken cancellationToken) {
+		public Task<BaseResponse<object>> GetServiceAccountAsync(string projectId, CancellationToken cancellationToken) {
 
-			return SendAsync(HttpMethod.Post, $"", null, cancellationToken)
+			return SendAsync(HttpMethod.Post, $"projects/{projectId}/serviceAccount", null, cancellationToken)
 				.ContinueWith(HandleBaseResponse<object>, cancellationToken)
 				.Unwrap();
 
@@ -26,7 +26,7 @@ namespace TransparentApiClient.Google.BigQuery.V2.Resources {
 		/// </summary>
 		public Task<BaseResponse<object>> ListAsync(CancellationToken cancellationToken) {
 
-			return SendAsync(HttpMethod.Post, $"", null, cancellationToken)
+			return SendAsync(HttpMethod.Post, $"projects", null, cancellationToken)
 				.ContinueWith(HandleBaseResponse<object>, cancellationToken)
 				.Unwrap();
 

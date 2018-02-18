@@ -1,4 +1,5 @@
 ﻿using Newtonsoft.Json.Linq;
+using System.Collections.Generic;
 
 namespace TransparentApiClient.Google.SchemasFileGenerator {
 
@@ -22,25 +23,42 @@ namespace TransparentApiClient.Google.SchemasFileGenerator {
         public string rootUrl { get; set; }
         public string servicePath { get; set; }
         public string batchPath { get; set; }
-        public JObject parameters { get; set; }
+        public Dictionary<string, JObject> parameters { get; set; }
         public JObject auth { get; set; }
         public JObject schemas { get; set; }
-        public JObject resources { get; set; }
+        public Dictionary<string, GoogleApiDiscoverResource> resources { get; set; }
     }
 
-    public class Icons {
+    internal class Icons {
         public string x16 { get; set; }
         public string x32 { get; set; }
     }
 
-    public class GoogleApiDiscoverMethod {
+    internal class GoogleApiDiscoverResource {
+        public Dictionary<string, GoogleApiDiscoverMethod> methods { get; set; }
+    }
+
+    internal class GoogleApiDiscoverMethod {
         public string id { get; set; }
         public string path { get; set; }
         public string httpMethod { get; set; }
         public string description { get; set; }
-        public JObject parameters { get; set; }
+        public Dictionary<string, GoogleApiDiscoverMethodParameter> parameters { get; set; }
         public string[] parameterOrder { get; set; }
+        public GoogleApiDiscoverMethodRequestResponse request { get; set; }
+        public GoogleApiDiscoverMethodRequestResponse response { get; set; }
         public string[] scopes { get; set; }
     }
-    
+
+    internal class GoogleApiDiscoverMethodRequestResponse {
+        public string _ref { get; set; }
+    }
+
+    internal class GoogleApiDiscoverMethodParameter {
+        public string type { get; set; }
+        public string description { get; set; }
+        public bool required { get; set; }
+        public string location { get; set; }
+    }
+
 }
