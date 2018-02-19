@@ -29,7 +29,7 @@ namespace TransparentApiClient.Google.BigQuery.V2.Schema {
 		/// <summary>
 		/// The dataset reference. Use this property to access specific parts of the dataset's ID, such as project ID or dataset ID.
 		/// </summary>
-		public object datasetReference { get; set; }
+		public DatasetReference datasetReference { get; set; }
 
 		/// <summary>
 		/// A descriptive name for the dataset, if one exists.

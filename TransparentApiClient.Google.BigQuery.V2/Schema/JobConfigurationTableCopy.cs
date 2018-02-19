@@ -13,17 +13,17 @@ namespace TransparentApiClient.Google.BigQuery.V2.Schema {
 		/// <summary>
 		/// Custom encryption configuration (e.g., Cloud KMS keys).
 		/// </summary>
-		public object destinationEncryptionConfiguration { get; set; }
+		public EncryptionConfiguration destinationEncryptionConfiguration { get; set; }
 
 		/// <summary>
 		/// [Required] The destination table
 		/// </summary>
-		public object destinationTable { get; set; }
+		public TableReference destinationTable { get; set; }
 
 		/// <summary>
 		/// [Pick one] Source table to copy.
 		/// </summary>
-		public object sourceTable { get; set; }
+		public TableReference sourceTable { get; set; }
 
 		/// <summary>
 		/// [Pick one] Source tables to copy.

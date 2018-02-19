@@ -7,7 +7,7 @@ namespace TransparentApiClient.Google.BigQuery.V2.Schema {
 		/// <summary>
 		/// The final state of the job.
 		/// </summary>
-		public object job { get; set; }
+		public Job job { get; set; }
 
 		/// <summary>
 		/// The resource type of the response.

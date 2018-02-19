@@ -20,18 +20,18 @@ namespace TransparentApiClient.Google.BigQuery.V2.Schema {
 		/// [Optional] Specifies the default dataset to use for unqualified table names in the query.
 		/// </summary>
 		[JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
-		public object defaultDataset { get; set; }
+		public DatasetReference defaultDataset { get; set; }
 
 		/// <summary>
 		/// Custom encryption configuration (e.g., Cloud KMS keys).
 		/// </summary>
-		public object destinationEncryptionConfiguration { get; set; }
+		public EncryptionConfiguration destinationEncryptionConfiguration { get; set; }
 
 		/// <summary>
 		/// [Optional] Describes the table where the query results should be stored. If not present, a new table will be created to store the results. This property must be set for large results that exceed the maximum response size.
 		/// </summary>
 		[JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
-		public object destinationTable { get; set; }
+		public TableReference destinationTable { get; set; }
 
 		/// <summary>
 		/// [Optional] If true and query uses legacy SQL dialect, flattens all nested and repeated fields in the query results. allowLargeResults must be true if this is set to false. For standard SQL queries, this flag is ignored and results are never flattened.
@@ -91,7 +91,7 @@ namespace TransparentApiClient.Google.BigQuery.V2.Schema {
 		/// <summary>
 		/// If specified, configures time-based partitioning for the destination table.
 		/// </summary>
-		public object timePartitioning { get; set; }
+		public TimePartitioning timePartitioning { get; set; }
 
 		/// <summary>
 		/// Specifies whether to use BigQuery's legacy SQL dialect for this query. The default value is true. If set to false, the query will use BigQuery's standard SQL: https://cloud.google.com/bigquery/sql-reference/ When useLegacySql is set to false, the value of flattenResults is ignored; query will be run as if flattenResults is false.

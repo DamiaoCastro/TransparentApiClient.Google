@@ -8,7 +8,7 @@ namespace TransparentApiClient.Google.BigQuery.V2.Schema {
 		/// [Optional] The type of the array's elements, if this is an array.
 		/// </summary>
 		[JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
-		public object arrayType { get; set; }
+		public QueryParameterType arrayType { get; set; }
 
 		/// <summary>
 		/// [Optional] The types of the fields of this struct, in order, if this is a struct.
@@ -38,7 +38,7 @@ namespace TransparentApiClient.Google.BigQuery.V2.Schema {
 		/// <summary>
 		/// [Required] The type of this field.
 		/// </summary>
-		public object type { get; set; }
+		public QueryParameterType type { get; set; }
 
 	}
 	}

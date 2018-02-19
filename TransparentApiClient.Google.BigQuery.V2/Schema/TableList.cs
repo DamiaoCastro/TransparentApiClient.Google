@@ -65,12 +65,12 @@ namespace TransparentApiClient.Google.BigQuery.V2.Schema {
 		/// <summary>
 		/// A reference uniquely identifying the table.
 		/// </summary>
-		public object tableReference { get; set; }
+		public TableReference tableReference { get; set; }
 
 		/// <summary>
 		/// The time-based partitioning for this table.
 		/// </summary>
-		public object timePartitioning { get; set; }
+		public TimePartitioning timePartitioning { get; set; }
 
 		/// <summary>
 		/// The type of table. Possible values are: TABLE, VIEW.

@@ -29,12 +29,12 @@ namespace TransparentApiClient.Google.BigQuery.V2.Schema {
 		/// <summary>
 		/// [Full-projection-only] Specifies the job configuration.
 		/// </summary>
-		public object configuration { get; set; }
+		public JobConfiguration configuration { get; set; }
 
 		/// <summary>
 		/// A result object that will be present only if the job has failed.
 		/// </summary>
-		public object errorResult { get; set; }
+		public ErrorProto errorResult { get; set; }
 
 		/// <summary>
 		/// Unique opaque ID of the job.
@@ -44,7 +44,7 @@ namespace TransparentApiClient.Google.BigQuery.V2.Schema {
 		/// <summary>
 		/// Job reference uniquely identifying the job.
 		/// </summary>
-		public object jobReference { get; set; }
+		public JobReference jobReference { get; set; }
 
 		/// <summary>
 		/// The resource type.
@@ -59,12 +59,12 @@ namespace TransparentApiClient.Google.BigQuery.V2.Schema {
 		/// <summary>
 		/// [Output-only] Information about the job, including starting time and ending time of the job.
 		/// </summary>
-		public object statistics { get; set; }
+		public JobStatistics statistics { get; set; }
 
 		/// <summary>
 		/// [Full-projection-only] Describes the state of the job.
 		/// </summary>
-		public object status { get; set; }
+		public JobStatus status { get; set; }
 
 		/// <summary>
 		/// [Full-projection-only] Email address of the user who ran the job.

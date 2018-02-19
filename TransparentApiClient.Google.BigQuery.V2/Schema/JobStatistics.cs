@@ -22,17 +22,17 @@ namespace TransparentApiClient.Google.BigQuery.V2.Schema {
 		/// <summary>
 		/// [Output-only] Statistics for an extract job.
 		/// </summary>
-		public object extract { get; set; }
+		public JobStatistics4 extract { get; set; }
 
 		/// <summary>
 		/// [Output-only] Statistics for a load job.
 		/// </summary>
-		public object load { get; set; }
+		public JobStatistics3 load { get; set; }
 
 		/// <summary>
 		/// [Output-only] Statistics for a query job.
 		/// </summary>
-		public object query { get; set; }
+		public JobStatistics2 query { get; set; }
 
 		/// <summary>
 		/// [Output-only] Start time of this job, in milliseconds since the epoch. This field will be present when the job transitions from the PENDING state to either RUNNING or DONE.

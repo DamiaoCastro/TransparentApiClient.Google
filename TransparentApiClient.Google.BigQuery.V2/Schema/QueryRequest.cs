@@ -8,7 +8,7 @@ namespace TransparentApiClient.Google.BigQuery.V2.Schema {
 		/// [Optional] Specifies the default datasetId and projectId to assume for any unqualified table names in the query. If not set, all table names in the query string must be qualified in the format 'datasetId.tableId'.
 		/// </summary>
 		[JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
-		public object defaultDataset { get; set; }
+		public DatasetReference defaultDataset { get; set; }
 
 		/// <summary>
 		/// [Optional] If set to true, BigQuery doesn't run the job. Instead, if the query is valid, BigQuery returns statistics about the job such as how many bytes would be processed. If the query is invalid, an error returns. The default value is false.

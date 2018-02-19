@@ -18,7 +18,7 @@ namespace TransparentApiClient.Google.BigQuery.V2.Schema {
 		/// <summary>
 		/// Custom encryption configuration (e.g., Cloud KMS keys).
 		/// </summary>
-		public object encryptionConfiguration { get; set; }
+		public EncryptionConfiguration encryptionConfiguration { get; set; }
 
 		/// <summary>
 		/// [Output-only] A hash of this resource.
@@ -35,7 +35,7 @@ namespace TransparentApiClient.Google.BigQuery.V2.Schema {
 		/// [Optional] Describes the data format, location, and other properties of a table stored outside of BigQuery. By defining these properties, the data source can then be queried as if it were a standard BigQuery table.
 		/// </summary>
 		[JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
-		public object externalDataConfiguration { get; set; }
+		public ExternalDataConfiguration externalDataConfiguration { get; set; }
 
 		/// <summary>
 		/// [Optional] A descriptive name for this table.
@@ -87,7 +87,7 @@ namespace TransparentApiClient.Google.BigQuery.V2.Schema {
 		/// [Optional] Describes the schema of this table.
 		/// </summary>
 		[JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
-		public object schema { get; set; }
+		public TableSchema schema { get; set; }
 
 		/// <summary>
 		/// [Output-only] A URL that can be used to access this resource again.
@@ -97,17 +97,17 @@ namespace TransparentApiClient.Google.BigQuery.V2.Schema {
 		/// <summary>
 		/// [Output-only] Contains information regarding this table's streaming buffer, if one is present. This field will be absent if the table is not being streamed to or if there is no data in the streaming buffer.
 		/// </summary>
-		public object streamingBuffer { get; set; }
+		public Streamingbuffer streamingBuffer { get; set; }
 
 		/// <summary>
 		/// [Required] Reference describing the ID of this table.
 		/// </summary>
-		public object tableReference { get; set; }
+		public TableReference tableReference { get; set; }
 
 		/// <summary>
 		/// If specified, configures time-based partitioning for this table.
 		/// </summary>
-		public object timePartitioning { get; set; }
+		public TimePartitioning timePartitioning { get; set; }
 
 		/// <summary>
 		/// [Output-only] Describes the table type. The following values are supported: TABLE: A normal BigQuery table. VIEW: A virtual table defined by a SQL query. EXTERNAL: A table that references data stored in an external storage system, such as Google Cloud Storage. The default value is TABLE.
@@ -118,7 +118,7 @@ namespace TransparentApiClient.Google.BigQuery.V2.Schema {
 		/// [Optional] The view definition.
 		/// </summary>
 		[JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
-		public object view { get; set; }
+		public ViewDefinition view { get; set; }
 
 	}
 }

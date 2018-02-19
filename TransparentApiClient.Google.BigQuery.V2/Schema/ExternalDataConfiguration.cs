@@ -13,7 +13,7 @@ namespace TransparentApiClient.Google.BigQuery.V2.Schema {
 		/// [Optional] Additional options if sourceFormat is set to BIGTABLE.
 		/// </summary>
 		[JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
-		public object bigtableOptions { get; set; }
+		public BigtableOptions bigtableOptions { get; set; }
 
 		/// <summary>
 		/// [Optional] The compression type of the data source. Possible values include GZIP and NONE. The default value is NONE. This setting is ignored for Google Cloud Bigtable, Google Cloud Datastore backups and Avro formats.
@@ -24,13 +24,13 @@ namespace TransparentApiClient.Google.BigQuery.V2.Schema {
 		/// <summary>
 		/// Additional properties to set if sourceFormat is set to CSV.
 		/// </summary>
-		public object csvOptions { get; set; }
+		public CsvOptions csvOptions { get; set; }
 
 		/// <summary>
 		/// [Optional] Additional options if sourceFormat is set to GOOGLE_SHEETS.
 		/// </summary>
 		[JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
-		public object googleSheetsOptions { get; set; }
+		public GoogleSheetsOptions googleSheetsOptions { get; set; }
 
 		/// <summary>
 		/// [Optional] Indicates if BigQuery should allow extra values that are not represented in the table schema. If true, the extra values are ignored. If false, records with extra columns are treated as bad records, and if there are too many bad records, an invalid error is returned in the job result. The default value is false. The sourceFormat property determines what BigQuery treats as an extra value: CSV: Trailing columns JSON: Named values that don't match any column names Google Cloud Bigtable: This setting is ignored. Google Cloud Datastore backups: This setting is ignored. Avro: This setting is ignored.
@@ -48,7 +48,7 @@ namespace TransparentApiClient.Google.BigQuery.V2.Schema {
 		/// [Optional] The schema for the data. Schema is required for CSV and JSON formats. Schema is disallowed for Google Cloud Bigtable, Cloud Datastore backups, and Avro formats.
 		/// </summary>
 		[JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
-		public object schema { get; set; }
+		public TableSchema schema { get; set; }
 
 		/// <summary>
 		/// [Required] The data format. For CSV files, specify "CSV". For Google sheets, specify "GOOGLE_SHEETS". For newline-delimited JSON, specify "NEWLINE_DELIMITED_JSON". For Avro files, specify "AVRO". For Google Cloud Datastore backups, specify "DATASTORE_BACKUP". [Beta] For Google Cloud Bigtable, specify "BIGTABLE".

@@ -41,7 +41,7 @@ namespace TransparentApiClient.Google.BigQuery.V2.Schema {
 		/// <summary>
 		/// [Required] A reference to the table being exported.
 		/// </summary>
-		public object sourceTable { get; set; }
+		public TableReference sourceTable { get; set; }
 
 	}
 }

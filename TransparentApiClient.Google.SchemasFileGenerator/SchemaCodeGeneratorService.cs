@@ -4,16 +4,20 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace TransparentApiClient.Google.SchemasFileGenerator {
-    internal class SchemaCodeGeneratorService {
+namespace TransparentApiClient.Google.SchemasFileGenerator
+{
+    internal class SchemaCodeGeneratorService
+    {
 
         private string newLine = Environment.NewLine;
 
-        internal IEnumerable<(string id, string fileContent)> GetFileContents(GoogleApiDiscover googleApiDiscover) {
+        internal IEnumerable<(string id, string fileContent)> GetFileContents(GoogleApiDiscover googleApiDiscover)
+        {
 
-            foreach (JProperty schemaProperty in googleApiDiscover.schemas.Children()) {
+            foreach (KeyValuePair<string, GoogleApiDiscoverSchema> schemaProperty in googleApiDiscover.schemas)
+            {
 
-                Console.WriteLine($"schema property '{schemaProperty.Name}'");
+                Console.WriteLine($"schema property '{schemaProperty.Key}'");
 
                 yield return GetClassCodeString(schemaProperty);
 
@@ -21,34 +25,44 @@ namespace TransparentApiClient.Google.SchemasFileGenerator {
 
         }
 
-        (string id, string content) GetClassCodeString(JProperty schemaProperty) {
-            var children = schemaProperty.Children();
-            string id = schemaProperty.Children().Values("id").First().ToObject<JValue>().Value.ToString();
+        (string id, string content) GetClassCodeString(KeyValuePair<string, GoogleApiDiscoverSchema> schemaProperty)
+        {
+            string id = schemaProperty.Key;
+            var children = schemaProperty.Value;
 
             var classContent = GetClassCodeString(id, children);
-            if (!string.IsNullOrWhiteSpace(classContent)) {
+            if (!string.IsNullOrWhiteSpace(classContent))
+            {
                 return (id, $"using System.Collections.Generic;{newLine}using Newtonsoft.Json;{newLine}{newLine}namespace TransparentApiClient.Google.BigQuery.V2.Schema {{ {newLine}{classContent}{newLine}}}");
             }
 
             return (id, null);
         }
 
-        string GetClassCodeString(string id, IJEnumerable<JToken> children) {
-            IEnumerable<JToken> properties = children.Values("properties");
-            if (properties.Count() > 0) {
-                var property = properties.First().Select(c => GetPropertyCodeString(c)).ToArray();
+        string GetClassCodeString(string id, GoogleApiDiscoverSchema schema)
+        {
+
+            //IEnumerable<JToken> properties = children.properties;
+            if (schema.properties != null && schema.properties.Count() > 0)
+            {
 
                 var adicionalClasses = new List<string>();
                 var fileContent = new StringBuilder($"\tpublic class {id} {{ {newLine}{newLine}");
-                foreach (var item in property) {
-                    fileContent.AppendLine($"{item.propertyString}{newLine}");
+                foreach (var item in schema.properties)
+                {
 
-                    if (!string.IsNullOrWhiteSpace(item.adicionalClass)) {
-                        adicionalClasses.Add(item.adicionalClass);
+                    var property = GetPropertyCodeString(item);
+
+                    fileContent.AppendLine($"{property.propertyString}{newLine}");
+
+                    if (!string.IsNullOrWhiteSpace(property.adicionalClass))
+                    {
+                        adicionalClasses.Add(property.adicionalClass);
                     }
                 }
 
-                foreach (var adicionalClass in adicionalClasses) {
+                foreach (var adicionalClass in adicionalClasses)
+                {
                     fileContent.AppendLine(adicionalClass);
                 }
 
@@ -60,18 +74,34 @@ namespace TransparentApiClient.Google.SchemasFileGenerator {
             return null;
         }
 
-        (string propertyString, string adicionalClass) GetPropertyCodeString(JToken token) {
+        (string propertyString, string adicionalClass) GetPropertyCodeString(KeyValuePair<string, GoogleApiDiscoverSchemaProperty> token)
+        {
 
-            string name = ((JProperty)token).Name;
+            string name = token.Key;
             string adicionalClass = null;
+            bool isCustomType = false;
 
             string typeName = "object", originalTypeName = "object";
-            var type = token.Values("type");
-            if (type.Count() > 0) {
-                originalTypeName = type.First().ToObject<JValue>().Value.ToString().ToLower();
+            var type = token.Value.type;
+            if (string.IsNullOrWhiteSpace(type))
+            {
+                if (!string.IsNullOrWhiteSpace(token.Value.refName))
+                {
+                    if (token.Value.refName.ToLower() != "jsonobject")
+                    {
+                        typeName = token.Value.refName;
+                        originalTypeName = typeName;
+                        isCustomType = true;
+                    }
+                }
+            }
+            else
+            {
+                originalTypeName = token.Value.type.ToLower();
                 typeName = originalTypeName;
 
-                switch (typeName) {
+                switch (typeName)
+                {
                     case "any":
                         typeName = "object";
                         break;
@@ -82,30 +112,39 @@ namespace TransparentApiClient.Google.SchemasFileGenerator {
                         typeName = "int";
                         break;
                     case "number":
-                        typeName = token.Values("format").First().ToObject<JValue>().Value.ToString();
+                        typeName = token.Value.format;
                         break;
                     case "array":
                         var enumerableType = "object";
-                        IJEnumerable<JToken> items = token.Values("items");
-                        if (items.Count() > 0) {
-                            var subItemProperties = items.First().Children().OfType<JProperty>();
-                            var subItemPropertyType = subItemProperties.Where(c => c.Name == "type");
-                            if (subItemPropertyType.Any()) {
+                        if (token.Value.items != null)
+                        {
+                            var subItemPropertyType = token.Value.items.type;
+                            if (!string.IsNullOrWhiteSpace(subItemPropertyType))
+                            {
 
-                                var subItemPropertyObject = subItemProperties.FirstOrDefault(c => c.Name == "properties");
-                                if (subItemPropertyObject != null && subItemPropertyObject.Values().Count() > 0) {
+                                var subItemPropertyObject = token.Value.items.properties;
+                                if (subItemPropertyObject != null)
+                                {
 
                                     enumerableType = $"{name.Substring(0, 1).ToUpper()}{ name.Substring(1)}";
-                                    if (!enumerableType.EndsWith("ss")) {
+                                    if (!enumerableType.EndsWith("ss"))
+                                    {
                                         enumerableType = enumerableType.TrimEnd('s');
                                     }
-                                    adicionalClass = GetClassCodeString(enumerableType, items);
+                                    adicionalClass = GetClassCodeString(enumerableType,
+                                        new GoogleApiDiscoverSchema()
+                                        {
+                                            properties = token.Value.items.properties.ToDictionary(c => c.Key, c => (GoogleApiDiscoverSchemaProperty)c.Value)
+                                        });
 
                                 }
 
-                            } else {
-                                var @ref = enumerableType = subItemProperties.FirstOrDefault(c => c.Name == "$ref")?.Value.ToString();
-                                if (!string.IsNullOrWhiteSpace(@ref)) {
+                            }
+                            else
+                            {
+                                var @ref = enumerableType = token.Value.items.refName;
+                                if (!string.IsNullOrWhiteSpace(@ref))
+                                {
                                     enumerableType = @ref;
                                 }
                             }
@@ -117,24 +156,28 @@ namespace TransparentApiClient.Google.SchemasFileGenerator {
 
             //description
             var descriptionString = string.Empty;
-            var description = token.Values("description");
-            if (description.Count() > 0) {
-                descriptionString = $"/// <summary>{newLine}\t\t/// {description.First().ToObject<JValue>().Value.ToString()}{newLine}\t\t/// </summary>";
+            if (!string.IsNullOrWhiteSpace(token.Value.description))
+            {
+                descriptionString = $"/// <summary>{newLine}\t\t/// {token.Value.description}{newLine}\t\t/// </summary>";
             }
 
             //optional
             var optional = (!string.IsNullOrWhiteSpace(descriptionString)) && descriptionString.Contains("[Optional]");
-            var optionalPossible = optional && (!new string[] { "string", "array", "object" }.Contains(originalTypeName));
+            var optionalPossible = optional && (!isCustomType) && (!new string[] { "string", "array", "object" }.Contains(originalTypeName));
 
             var property = $"public {typeName}{(optionalPossible ? "?" : string.Empty)} {name} {{ get; set; }}";
 
             //default
-            var @default = token.Values("default");
-            if (@default.Count() > 0) {
-                var defaultString = @default.First().ToObject<JValue>().Value.ToString();
-                if (typeName.ToLower() == "string") {
+            string @default = token.Value.@default;
+            if (!string.IsNullOrWhiteSpace(@default))
+            {
+                var defaultString = @default;
+                if (typeName.ToLower() == "string")
+                {
                     property = $"{property} = \"{defaultString.Replace("\"", "\\\"")}\";";
-                } else {
+                }
+                else
+                {
                     property = $"{property} = {defaultString};";
                 }
             }

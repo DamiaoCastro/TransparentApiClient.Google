@@ -13,12 +13,12 @@ namespace TransparentApiClient.Google.BigQuery.V2.Schema {
 		/// <summary>
 		/// [Required] The type of this parameter.
 		/// </summary>
-		public object parameterType { get; set; }
+		public QueryParameterType parameterType { get; set; }
 
 		/// <summary>
 		/// [Required] The value of this parameter.
 		/// </summary>
-		public object parameterValue { get; set; }
+		public QueryParameterValue parameterValue { get; set; }
 
 	}
 }

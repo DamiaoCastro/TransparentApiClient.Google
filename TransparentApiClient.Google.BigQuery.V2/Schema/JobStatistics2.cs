@@ -22,7 +22,7 @@ namespace TransparentApiClient.Google.BigQuery.V2.Schema {
 		/// <summary>
 		/// [Output-only, Experimental] The DDL target table. Present only for CREATE/DROP TABLE/VIEW queries.
 		/// </summary>
-		public object ddlTargetTable { get; set; }
+		public TableReference ddlTargetTable { get; set; }
 
 		/// <summary>
 		/// [Output-only] The original estimate of bytes processed for the job.
@@ -47,7 +47,7 @@ namespace TransparentApiClient.Google.BigQuery.V2.Schema {
 		/// <summary>
 		/// [Output-only] The schema of the results. Present only for successful dry run of non-legacy SQL queries.
 		/// </summary>
-		public object schema { get; set; }
+		public TableSchema schema { get; set; }
 
 		/// <summary>
 		/// [Output-only, Experimental] The type of query statement, if valid. Possible values (new values might be added in the future): "SELECT": SELECT query. "INSERT": INSERT query; see https://cloud.google.com/bigquery/docs/reference/standard-sql/data-manipulation-language "UPDATE": UPDATE query; see https://cloud.google.com/bigquery/docs/reference/standard-sql/data-manipulation-language "DELETE": DELETE query; see https://cloud.google.com/bigquery/docs/reference/standard-sql/data-manipulation-language "CREATE_TABLE": CREATE [OR REPLACE] TABLE without AS SELECT. "CREATE_TABLE_AS_SELECT": CREATE [OR REPLACE] TABLE ... AS SELECT ... "DROP_TABLE": DROP TABLE query. "CREATE_VIEW": CREATE [OR REPLACE] VIEW ... AS SELECT ... "DROP_VIEW": DROP VIEW query.

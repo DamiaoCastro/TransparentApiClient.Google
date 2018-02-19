@@ -54,7 +54,7 @@ namespace TransparentApiClient.Google.BigQuery.V2.Schema {
 		/// <summary>
 		/// A unique reference to this project.
 		/// </summary>
-		public object projectReference { get; set; }
+		public ProjectReference projectReference { get; set; }
 
 	}
 	}

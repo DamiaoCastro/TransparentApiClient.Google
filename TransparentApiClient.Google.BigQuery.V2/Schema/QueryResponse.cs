@@ -22,7 +22,7 @@ namespace TransparentApiClient.Google.BigQuery.V2.Schema {
 		/// <summary>
 		/// Reference to the Job that was created to run the query. This field will be present even if the original request timed out, in which case GetQueryResults can be used to read the results once the query has completed. Since this API only returns the first page of results, subsequent pages can be fetched via the same mechanism (GetQueryResults).
 		/// </summary>
-		public object jobReference { get; set; }
+		public JobReference jobReference { get; set; }
 
 		/// <summary>
 		/// The resource type.
@@ -47,7 +47,7 @@ namespace TransparentApiClient.Google.BigQuery.V2.Schema {
 		/// <summary>
 		/// The schema of the results. Present only when the query completes successfully.
 		/// </summary>
-		public object schema { get; set; }
+		public TableSchema schema { get; set; }
 
 		/// <summary>
 		/// The total number of bytes processed for this query. If this query was a dry run, this is the number of bytes that would be processed if the query were run.

@@ -7,7 +7,7 @@ namespace TransparentApiClient.Google.BigQuery.V2.Schema {
 		/// <summary>
 		/// [Required] Describes the job configuration.
 		/// </summary>
-		public object configuration { get; set; }
+		public JobConfiguration configuration { get; set; }
 
 		/// <summary>
 		/// [Output-only] A hash of this resource.
@@ -23,7 +23,7 @@ namespace TransparentApiClient.Google.BigQuery.V2.Schema {
 		/// [Optional] Reference describing the unique-per-user name of the job.
 		/// </summary>
 		[JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
-		public object jobReference { get; set; }
+		public JobReference jobReference { get; set; }
 
 		/// <summary>
 		/// [Output-only] The type of the resource.
@@ -38,12 +38,12 @@ namespace TransparentApiClient.Google.BigQuery.V2.Schema {
 		/// <summary>
 		/// [Output-only] Information about the job, including starting time and ending time of the job.
 		/// </summary>
-		public object statistics { get; set; }
+		public JobStatistics statistics { get; set; }
 
 		/// <summary>
 		/// [Output-only] The status of this job. Examine this value when polling an asynchronous job to see if the job is complete.
 		/// </summary>
-		public object status { get; set; }
+		public JobStatus status { get; set; }
 
 		/// <summary>
 		/// [Output-only] Email address of the user who ran the job.

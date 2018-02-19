@@ -29,18 +29,18 @@ namespace TransparentApiClient.Google.BigQuery.V2.Schema {
 		/// <summary>
 		/// Custom encryption configuration (e.g., Cloud KMS keys).
 		/// </summary>
-		public object destinationEncryptionConfiguration { get; set; }
+		public EncryptionConfiguration destinationEncryptionConfiguration { get; set; }
 
 		/// <summary>
 		/// [Required] The destination table to load the data into.
 		/// </summary>
-		public object destinationTable { get; set; }
+		public TableReference destinationTable { get; set; }
 
 		/// <summary>
 		/// [Experimental] [Optional] Properties with which to create the destination table if it is new.
 		/// </summary>
 		[JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
-		public object destinationTableProperties { get; set; }
+		public DestinationTableProperties destinationTableProperties { get; set; }
 
 		/// <summary>
 		/// [Optional] The character encoding of the data. The supported values are UTF-8 or ISO-8859-1. The default value is UTF-8. BigQuery decodes the data after the raw, binary data has been split using the values of the quote and fieldDelimiter properties.
@@ -87,7 +87,7 @@ namespace TransparentApiClient.Google.BigQuery.V2.Schema {
 		/// [Optional] The schema for the destination table. The schema can be omitted if the destination table already exists, or if you're loading data from Google Cloud Datastore.
 		/// </summary>
 		[JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
-		public object schema { get; set; }
+		public TableSchema schema { get; set; }
 
 		/// <summary>
 		/// [Deprecated] The inline schema. For CSV schemas, specify as "Field1:Type1[,Field2:Type2]*". For example, "foo:STRING, bar:INTEGER, baz:FLOAT".
@@ -124,7 +124,7 @@ namespace TransparentApiClient.Google.BigQuery.V2.Schema {
 		/// <summary>
 		/// If specified, configures time-based partitioning for the destination table.
 		/// </summary>
-		public object timePartitioning { get; set; }
+		public TimePartitioning timePartitioning { get; set; }
 
 		/// <summary>
 		/// [Optional] Specifies the action that occurs if the destination table already exists. The following values are supported: WRITE_TRUNCATE: If the table already exists, BigQuery overwrites the table data. WRITE_APPEND: If the table already exists, BigQuery appends the data to the table. WRITE_EMPTY: If the table already exists and contains data, a 'duplicate' error is returned in the job result. The default value is WRITE_APPEND. Each action is atomic and only occurs if BigQuery is able to complete the job successfully. Creation, truncation and append actions occur as one atomic update upon job completion.
