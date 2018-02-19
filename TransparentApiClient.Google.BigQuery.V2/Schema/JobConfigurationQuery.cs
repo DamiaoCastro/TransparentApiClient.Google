@@ -86,7 +86,7 @@ namespace TransparentApiClient.Google.BigQuery.V2.Schema {
 		/// [Optional] If querying an external data source outside of BigQuery, describes the data format, location and other properties of the data source. By defining these properties, the data source can then be queried as if it were a standard BigQuery table.
 		/// </summary>
 		[JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
-		public object tableDefinitions { get; set; }
+		public ExternalDataConfiguration tableDefinitions { get; set; }
 
 		/// <summary>
 		/// If specified, configures time-based partitioning for the destination table.
