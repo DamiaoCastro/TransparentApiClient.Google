@@ -2,11 +2,9 @@
 using Newtonsoft.Json.Linq;
 using System.Collections.Generic;
 
-namespace TransparentApiClient.Google.SchemasFileGenerator
-{
+namespace TransparentApiClient.Google.SchemasFileGenerator {
 
-    internal class GoogleApiDiscover
-    {
+    internal class GoogleApiDiscover {
         public string kind { get; set; }
         public string etag { get; set; }
         public string discoveryVersion { get; set; }
@@ -32,44 +30,43 @@ namespace TransparentApiClient.Google.SchemasFileGenerator
         public Dictionary<string, GoogleApiDiscoverResource> resources { get; set; }
     }
 
-    internal class Icons
-    {
+    internal class Icons {
         public string x16 { get; set; }
         public string x32 { get; set; }
     }
 
-    internal class GoogleApiDiscoverSchema
-    {
+    internal class GoogleApiDiscoverSchema {
         public string id { get; set; }
         public string type { get; set; }
-        public Dictionary<string, GoogleApiDiscoverSchemaProperty> properties { get; set; }
         [JsonProperty("$ref")]
         public string refName { get; set; }
-    }
-
-    internal class GoogleApiDiscoverSchemaProperty
-    {
-        public string type { get; set; }
         public string description { get; set; }
-        public string format { get; set; }
-        public GoogleApiDiscoverSchemaPropertyItem items { get; set; }
         public string @default { get; set; }
-        [JsonProperty("$ref")]
-        public string refName { get; set; }
+        public bool required { get; set; }
+        public string format { get; set; }
+        public string pattern { get; set; }
+        public string minimum { get; set; }
+        public string maximum { get; set; }
+        public IEnumerable<string> @enum { get; set; }
+        public IEnumerable<string> enumDescriptions { get; set; }
+        public bool repeated { get; set; }
+        public string location { get; set; }
+
+        public Dictionary<string, GoogleApiDiscoverSchema> properties { get; set; }
+        public GoogleApiDiscoverSchema additionalProperties { get; set; }
+        public GoogleApiDiscoverSchema items { get; set; }
+        public GoogleApiDiscoverSchemaPropertyAnnotations annotations { get; set; }
+    }
+    
+    internal class GoogleApiDiscoverSchemaPropertyAnnotations {
+        public IEnumerable<string> required { get; set; }
     }
 
-    internal class GoogleApiDiscoverSchemaPropertyItem : GoogleApiDiscoverSchemaProperty
-    {
-        public Dictionary<string, GoogleApiDiscoverSchemaPropertyItem> properties { get; set; }
-    }
-
-    internal class GoogleApiDiscoverResource
-    {
+    internal class GoogleApiDiscoverResource {
         public Dictionary<string, GoogleApiDiscoverMethod> methods { get; set; }
     }
 
-    internal class GoogleApiDiscoverMethod
-    {
+    internal class GoogleApiDiscoverMethod {
         public string id { get; set; }
         public string path { get; set; }
         public string httpMethod { get; set; }
@@ -81,14 +78,12 @@ namespace TransparentApiClient.Google.SchemasFileGenerator
         public string[] scopes { get; set; }
     }
 
-    internal class GoogleApiDiscoverMethodRequestResponse
-    {
+    internal class GoogleApiDiscoverMethodRequestResponse {
         [JsonProperty("$ref")]
         public string refName { get; set; }
     }
 
-    internal class GoogleApiDiscoverMethodParameter
-    {
+    internal class GoogleApiDiscoverMethodParameter {
         public string type { get; set; }
         public string description { get; set; }
         public bool required { get; set; }
