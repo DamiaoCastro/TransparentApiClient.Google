@@ -7,7 +7,12 @@ using System.Text;
 namespace TransparentApiClient.Google.SchemasFileGenerator {
     internal class ApiCodeGeneratorService {
 
+        public ApiCodeGeneratorService(string @namespace) {
+            this.@namespace = @namespace;
+        }
+
         private string newLine = Environment.NewLine;
+        private readonly string @namespace;
 
         internal IEnumerable<(string id, string fileContent)> GetFileContents(GoogleApiDiscover googleApiDiscover) {
 
@@ -33,7 +38,7 @@ namespace TransparentApiClient.Google.SchemasFileGenerator {
                 classGenerator.AppendLine("using System.Net.Http;");
                 classGenerator.AppendLine("using System.Threading.Tasks;");
                 classGenerator.AppendLine($"using TransparentApiClient.Google.Core;{newLine}");
-                classGenerator.AppendLine($"namespace TransparentApiClient.Google.BigQuery.V2.Resources {{ {newLine}");
+                classGenerator.AppendLine($"namespace {@namespace}.Resources {{ {newLine}");
                 classGenerator.AppendLine(classContent);
                 classGenerator.Append($"}}");
 

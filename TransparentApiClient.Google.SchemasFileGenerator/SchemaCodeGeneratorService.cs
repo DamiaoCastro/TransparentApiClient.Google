@@ -6,7 +6,12 @@ using System.Text;
 namespace TransparentApiClient.Google.SchemasFileGenerator {
     internal class SchemaCodeGeneratorService {
 
+        public SchemaCodeGeneratorService(string @namespace) {
+            this.@namespace = @namespace;
+        }
+
         private string newLine = Environment.NewLine;
+        private readonly string @namespace;
 
         internal IEnumerable<(string id, string fileContent)> GetFileContents(GoogleApiDiscover googleApiDiscover) {
 
@@ -26,7 +31,7 @@ namespace TransparentApiClient.Google.SchemasFileGenerator {
 
             var classContent = GetClassCodeString(id, children);
             if (!string.IsNullOrWhiteSpace(classContent)) {
-                return (id, $"using System.Collections.Generic;{newLine}using Newtonsoft.Json;{newLine}{newLine}namespace TransparentApiClient.Google.BigQuery.V2.Schema {{ {newLine}{classContent}{newLine}}}");
+                return (id, $"using System.Collections.Generic;{newLine}using Newtonsoft.Json;{newLine}{newLine}namespace {@namespace}.Schema {{ {newLine}{classContent}{newLine}}}");
             }
 
             return (id, null);

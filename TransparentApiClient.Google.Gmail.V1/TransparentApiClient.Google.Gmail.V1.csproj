@@ -5,12 +5,12 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\TransparentApiClient.Google.Core\TransparentApiClient.Google.Core.csproj" />
+    <Folder Include="Resources\" />
+    <Folder Include="Schema\" />
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Schema\" />
-    <Folder Include="Resources\" />
+    <ProjectReference Include="..\TransparentApiClient.Google.Core\TransparentApiClient.Google.Core.csproj" />
   </ItemGroup>
 
 </Project>

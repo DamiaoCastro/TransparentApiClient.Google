@@ -15,7 +15,9 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "TestApplications", "TestApp
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tooling", "Tooling", "{ADFB82CC-D61A-4969-B61B-09A910071C05}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TransparentApiClient.Google.SchemasFileGenerator", "TransparentApiClient.Google.SchemasFileGenerator\TransparentApiClient.Google.SchemasFileGenerator.csproj", "{757C8E87-B824-4EA9-8410-B29E7F7BA6A7}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TransparentApiClient.Google.SchemasFileGenerator", "TransparentApiClient.Google.SchemasFileGenerator\TransparentApiClient.Google.SchemasFileGenerator.csproj", "{757C8E87-B824-4EA9-8410-B29E7F7BA6A7}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TransparentApiClient.Google.Gmail.V1", "TransparentApiClient.Google.Gmail.V1\TransparentApiClient.Google.Gmail.V1.csproj", "{3EE2C358-2ECD-44F2-BDF1-9D19F30B32F4}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -43,6 +45,10 @@ Global
 		{757C8E87-B824-4EA9-8410-B29E7F7BA6A7}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{757C8E87-B824-4EA9-8410-B29E7F7BA6A7}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{757C8E87-B824-4EA9-8410-B29E7F7BA6A7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3EE2C358-2ECD-44F2-BDF1-9D19F30B32F4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3EE2C358-2ECD-44F2-BDF1-9D19F30B32F4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3EE2C358-2ECD-44F2-BDF1-9D19F30B32F4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3EE2C358-2ECD-44F2-BDF1-9D19F30B32F4}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
