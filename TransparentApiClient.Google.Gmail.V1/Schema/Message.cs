@@ -44,13 +44,13 @@ namespace TransparentApiClient.Google.Gmail.V1.Schema {
 		/// </summary>
 		public string snippet { get; set; }
 
-		/// <summary>
-		/// The ID of the thread the message belongs to. To add a message or draft to a thread, the following criteria must be met: 
-- The requested threadId must be specified on the Message or Draft.Message you supply with your request. 
-- The References and In-Reply-To headers must be set in compliance with the RFC 2822 standard. 
-- The Subject headers must match.
-		/// </summary>
-		public string threadId { get; set; }
+        /// <summary>
+        /// The ID of the thread the message belongs to. To add a message or draft to a thread, the following criteria must be met: 
+        /// - The requested threadId must be specified on the Message or Draft.Message you supply with your request. 
+        /// - The References and In-Reply-To headers must be set in compliance with the RFC 2822 standard. 
+        /// - The Subject headers must match.
+        /// </summary>
+        public string threadId { get; set; }
 
 	}
 }

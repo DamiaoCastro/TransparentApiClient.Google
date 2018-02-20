@@ -6,27 +6,31 @@ namespace TransparentApiClient.Google.BigQuery.V2.TestApplication {
     class Program {
         static void Main(string[] args) {
 
-            Console.WriteLine("--- TabledataClient --- ");
+            Console.WriteLine("--- tabledataclient --- ");
 
             byte[] serviceAccountCredentials = System.IO.File.ReadAllBytes(@"credencials.json");
-            var tabledataClient = new Resources.Tabledata(serviceAccountCredentials);
+            var tabledataclient = new Resources.Tabledata(serviceAccountCredentials);
 
-            Console.WriteLine("--- ListAsync --- ");
+            Console.WriteLine("--- listasync --- ");
 
-            var list1 = tabledataClient.ListAsync("extensiontest", "damiao-1982", "table1", 10, null, "Bool,Boolean", null, CancellationToken.None).Result;
-            var list2 = tabledataClient.ListAsync("extensiontest", "damiao-1982", "table2", null, null, null, null, CancellationToken.None).Result;
-            var list3 = tabledataClient.ListAsync("extensiontest", "damiao-1982", "table3", null, null, null, null, CancellationToken.None).Result;
+            var list1 = tabledataclient.ListAsync("extensiontest", "damiao-1982", "table1", 10, null, "bool,boolean", null, CancellationToken.None).Result;
+            var list2 = tabledataclient.ListAsync("extensiontest", "damiao-1982", "table2", null, null, null, null, CancellationToken.None).Result;
+            var list3 = tabledataclient.ListAsync("extensiontest", "damiao-1982", "table3", null, null, null, null, CancellationToken.None).Result;
 
-            Console.WriteLine("--- InsertAllAsync --- ");
+            Console.WriteLine("--- insertallasync --- ");
 
-            var insertId = DateTime.UtcNow.ToString();
+            var insertid = DateTime.UtcNow.ToString();
 
-            var requestBody = new Schema.TableDataInsertAllRequest() {
+            var requestbody = new Schema.TableDataInsertAllRequest() {
                 rows = new Schema.TableDataInsertAllRequest.Row[] {
-                    new Schema.TableDataInsertAllRequest.Row() { insertId = insertId, json = new { column1 = insertId } }
+                    new Schema.TableDataInsertAllRequest.Row() { insertId = insertid, json = new { column1 = insertid } }
                 }
             };
-            var insertAll = tabledataClient.InsertAllAsync("extensiontest", "damiao-1982", "table3", requestBody, CancellationToken.None).Result;
+            var insertall = tabledataclient.InsertAllAsync("extensiontest", "damiao-1982", "table3", requestbody, CancellationToken.None).Result;
+
+            Console.WriteLine("--- MessagesClient --- ");
+            var messagesClient = new Gmail.V1.Resources.Users(serviceAccountCredentials);
+            var list = messagesClient.GetProfileAsync("ccc", CancellationToken.None).Result;
 
             Debugger.Break();
 

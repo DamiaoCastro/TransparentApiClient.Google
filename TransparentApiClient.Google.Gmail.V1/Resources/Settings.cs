@@ -62,9 +62,8 @@ namespace TransparentApiClient.Google.Gmail.V1.Resources {
 		}
 
 		/// <summary>
-		/// Updates the auto-forwarding setting for the specified account. A verified forwarding address must be specified when auto-forwarding is enabled.
-
-This method is only available to service account clients that have been delegated domain-wide authority.
+		/// Updates the auto-forwarding setting for the specified account. A verified forwarding address must be specified when auto-forwarding is enabled. 
+        /// This method is only available to service account clients that have been delegated domain-wide authority.
 		/// </summary>
 		/// <param name="userId">User's email address. The special value "me" can be used to indicate the authenticated user.</param>
 		public Task<BaseResponse<Schema.AutoForwarding>> UpdateAutoForwardingAsync(string userId, Schema.AutoForwarding AutoForwarding, CancellationToken cancellationToken) {
