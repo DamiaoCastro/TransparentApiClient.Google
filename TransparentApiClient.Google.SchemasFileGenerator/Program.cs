@@ -58,7 +58,7 @@ namespace TransparentApiClient.Google.SchemasFileGenerator {
 
                     Task.Run(() => {
 
-                        var url = "https://pubsub.googleapis.com/$discovery/rest?version=v1";
+                        var url = "https://www.googleapis.com/discovery/v1/apis/pubsub/v1/rest";
                         var basePath = @"..\TransparentApiClient.Google.PubSub.V1";
                         var @namespace = "TransparentApiClient.Google.PubSub.V1";
                         WriteFiles(url, basePath, @namespace);

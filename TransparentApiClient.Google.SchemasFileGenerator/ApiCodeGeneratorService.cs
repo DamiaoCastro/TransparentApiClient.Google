@@ -29,20 +29,23 @@ namespace TransparentApiClient.Google.SchemasFileGenerator {
 
             string id = CamelCase(schemaProperty.Key);
 
-            string classContent = GetClassCodeString(googleApiDiscover, id, schemaProperty.Value.methods);
-            if (!string.IsNullOrWhiteSpace(classContent)) {
+            if (schemaProperty.Value.methods != null) {
+                string classContent = GetClassCodeString(googleApiDiscover, id, schemaProperty.Value.methods);
+                if (!string.IsNullOrWhiteSpace(classContent)) {
 
-                var classGenerator = new StringBuilder();
-                classGenerator.AppendLine("using System;");
-                classGenerator.AppendLine("using System.Threading;");
-                classGenerator.AppendLine("using System.Net.Http;");
-                classGenerator.AppendLine("using System.Threading.Tasks;");
-                classGenerator.AppendLine($"using TransparentApiClient.Google.Core;{newLine}");
-                classGenerator.AppendLine($"namespace {@namespace}.Resources {{ {newLine}");
-                classGenerator.AppendLine(classContent);
-                classGenerator.Append($"}}");
+                    var classGenerator = new StringBuilder();
+                    classGenerator.AppendLine("using System;");
+                    classGenerator.AppendLine("using System.Threading;");
+                    classGenerator.AppendLine("using System.Net.Http;");
+                    classGenerator.AppendLine("using System.Threading.Tasks;");
+                    classGenerator.AppendLine("using Newtonsoft.Json;");
+                    classGenerator.AppendLine($"using TransparentApiClient.Google.Core;{newLine}");
+                    classGenerator.AppendLine($"namespace {@namespace}.Resources {{ {newLine}");
+                    classGenerator.AppendLine(classContent);
+                    classGenerator.Append($"}}");
 
-                return (id, classGenerator.ToString());
+                    return (id, classGenerator.ToString());
+                }
             }
 
             return (id, null);
@@ -88,7 +91,8 @@ namespace TransparentApiClient.Google.SchemasFileGenerator {
                 requestBodyVar = CamelCase(method.request.refName);
                 functionParams.Add($"Schema.{method.request.refName} {requestBodyVar}");
             }
-            functionParams.Add("CancellationToken cancellationToken");
+            functionParams.Add("JsonSerializerSettings settings = null");
+            functionParams.Add("CancellationToken cancellationToken = default(CancellationToken)");
             var parameters = string.Join(", ", functionParams);
 
             var responseClass = string.IsNullOrWhiteSpace(method.response?.refName) ? "object" : $"Schema.{method.response.refName}";
@@ -124,7 +128,7 @@ namespace TransparentApiClient.Google.SchemasFileGenerator {
             }
 
             //remaining function body
-            methodBuilder.AppendLine($"{newLine}\t\t\treturn SendAsync(HttpMethod.{httpMethod}, $\"{method.path}{queryStringOnPath}\", {requestBodyVar}, cancellationToken)");
+            methodBuilder.AppendLine($"{newLine}\t\t\treturn SendAsync(HttpMethod.{httpMethod}, $\"{method.path}{queryStringOnPath}\", {requestBodyVar}, settings, cancellationToken)");
             methodBuilder.AppendLine($"\t\t\t\t.ContinueWith(HandleBaseResponse<{responseClass}>, cancellationToken)");
             methodBuilder.AppendLine($"\t\t\t\t.Unwrap();{newLine}\t\t}}");
 
@@ -134,7 +138,10 @@ namespace TransparentApiClient.Google.SchemasFileGenerator {
         private string GetDescription(GoogleApiDiscoverMethod method) {
             var description = new StringBuilder();
             if (!string.IsNullOrWhiteSpace(method.description)) {
-                description.AppendLine($"\t\t/// <summary>{newLine}\t\t/// {method.description}{newLine}\t\t/// </summary>");
+
+                var descriptionLines = method.description.Split(Environment.NewLine);
+
+                description.AppendLine($"\t\t/// <summary>{newLine}\t\t/// {string.Join($"{newLine}\t\t///", descriptionLines)}{newLine}\t\t/// </summary>");
                 foreach (var item in method.parameters.Where(c => c.Value.location == "path")) {
                     description.AppendLine($"\t\t/// <param name=\"{item.Key}\">{item.Value.description}</param>");
                 }

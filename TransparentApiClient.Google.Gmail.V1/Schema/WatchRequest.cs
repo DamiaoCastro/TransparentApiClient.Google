@@ -16,7 +16,8 @@ namespace TransparentApiClient.Google.Gmail.V1.Schema {
 
 		/// <summary>
 		/// A fully qualified Google Cloud Pub/Sub API topic name to publish the events to. This topic name **must** already exist in Cloud Pub/Sub and you **must** have already granted gmail "publish" permission on it. For example, "projects/my-project-identifier/topics/my-topic-name" (using the Cloud Pub/Sub "v1" topic naming format).
-        /// Note that the "my-project-identifier" portion must exactly match your Google developer project id (the one executing this watch request).
+		///
+		///Note that the "my-project-identifier" portion must exactly match your Google developer project id (the one executing this watch request).
 		/// </summary>
 		public string topicName { get; set; }
 

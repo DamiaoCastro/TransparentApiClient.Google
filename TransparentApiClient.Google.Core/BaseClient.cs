@@ -26,7 +26,7 @@ namespace TransparentApiClient.Google.Core {
             this.baseUri = baseUri;
         }
 
-        protected Task<HttpResponseMessage> SendAsync(HttpMethod httpMethod, string partialUri, object requestBodyObject = null, CancellationToken cancellationToken = default(CancellationToken)) {
+        protected Task<HttpResponseMessage> SendAsync(HttpMethod httpMethod, string partialUri, object requestBodyObject = null, JsonSerializerSettings settings = null, CancellationToken cancellationToken = default(CancellationToken)) {
 
             var _httpClient = GetHttpClient();
 
@@ -36,7 +36,7 @@ namespace TransparentApiClient.Google.Core {
 
                 byte[] compressedBodyBytes;
                 using (var memoryStream = new System.IO.MemoryStream()) {
-                    var requestBodyObjectBytes = System.Text.Encoding.UTF8.GetBytes(JsonConvert.SerializeObject(requestBodyObject));
+                    var requestBodyObjectBytes = System.Text.Encoding.UTF8.GetBytes(JsonConvert.SerializeObject(requestBodyObject, Formatting.None, settings));
                     using (var zipStream = new System.IO.Compression.GZipStream(memoryStream, System.IO.Compression.CompressionMode.Compress)) {
                         zipStream.Write(requestBodyObjectBytes, 0, requestBodyObjectBytes.Length);
                     }

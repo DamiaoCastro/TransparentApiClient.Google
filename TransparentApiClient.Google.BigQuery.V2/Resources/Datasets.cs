@@ -2,6 +2,7 @@ using System;
 using System.Threading;
 using System.Net.Http;
 using System.Threading.Tasks;
+using Newtonsoft.Json;
 using TransparentApiClient.Google.Core;
 
 namespace TransparentApiClient.Google.BigQuery.V2.Resources { 
@@ -19,13 +20,13 @@ namespace TransparentApiClient.Google.BigQuery.V2.Resources {
 		/// <param name="datasetId">Dataset ID of dataset being deleted</param>
 		/// <param name="projectId">Project ID of the dataset being deleted</param>
 		/// <param name="deleteContents">If True, delete all the tables in the dataset. If False and the dataset contains tables, the request will fail. Default is False</param>
-		public Task<BaseResponse<object>> DeleteAsync(string datasetId, string projectId, bool? deleteContents, CancellationToken cancellationToken) {
+		public Task<BaseResponse<object>> DeleteAsync(string datasetId, string projectId, bool? deleteContents, JsonSerializerSettings settings = null, CancellationToken cancellationToken = default(CancellationToken)) {
 			if (string.IsNullOrWhiteSpace(datasetId)) { throw new ArgumentNullException(nameof(datasetId)); }
 			if (string.IsNullOrWhiteSpace(projectId)) { throw new ArgumentNullException(nameof(projectId)); }
 
 			string queryString = GetQueryString(new {deleteContents});
 
-			return SendAsync(HttpMethod.Delete, $"projects/{projectId}/datasets/{datasetId}?{queryString}", null, cancellationToken)
+			return SendAsync(HttpMethod.Delete, $"projects/{projectId}/datasets/{datasetId}?{queryString}", null, settings, cancellationToken)
 				.ContinueWith(HandleBaseResponse<object>, cancellationToken)
 				.Unwrap();
 		}
@@ -35,11 +36,11 @@ namespace TransparentApiClient.Google.BigQuery.V2.Resources {
 		/// </summary>
 		/// <param name="datasetId">Dataset ID of the requested dataset</param>
 		/// <param name="projectId">Project ID of the requested dataset</param>
-		public Task<BaseResponse<Schema.Dataset>> GetAsync(string datasetId, string projectId, CancellationToken cancellationToken) {
+		public Task<BaseResponse<Schema.Dataset>> GetAsync(string datasetId, string projectId, JsonSerializerSettings settings = null, CancellationToken cancellationToken = default(CancellationToken)) {
 			if (string.IsNullOrWhiteSpace(datasetId)) { throw new ArgumentNullException(nameof(datasetId)); }
 			if (string.IsNullOrWhiteSpace(projectId)) { throw new ArgumentNullException(nameof(projectId)); }
 
-			return SendAsync(HttpMethod.Get, $"projects/{projectId}/datasets/{datasetId}", null, cancellationToken)
+			return SendAsync(HttpMethod.Get, $"projects/{projectId}/datasets/{datasetId}", null, settings, cancellationToken)
 				.ContinueWith(HandleBaseResponse<Schema.Dataset>, cancellationToken)
 				.Unwrap();
 		}
@@ -48,10 +49,10 @@ namespace TransparentApiClient.Google.BigQuery.V2.Resources {
 		/// Creates a new empty dataset.
 		/// </summary>
 		/// <param name="projectId">Project ID of the new dataset</param>
-		public Task<BaseResponse<Schema.Dataset>> InsertAsync(string projectId, Schema.Dataset Dataset, CancellationToken cancellationToken) {
+		public Task<BaseResponse<Schema.Dataset>> InsertAsync(string projectId, Schema.Dataset Dataset, JsonSerializerSettings settings = null, CancellationToken cancellationToken = default(CancellationToken)) {
 			if (string.IsNullOrWhiteSpace(projectId)) { throw new ArgumentNullException(nameof(projectId)); }
 
-			return SendAsync(HttpMethod.Post, $"projects/{projectId}/datasets", Dataset, cancellationToken)
+			return SendAsync(HttpMethod.Post, $"projects/{projectId}/datasets", Dataset, settings, cancellationToken)
 				.ContinueWith(HandleBaseResponse<Schema.Dataset>, cancellationToken)
 				.Unwrap();
 		}
@@ -64,12 +65,12 @@ namespace TransparentApiClient.Google.BigQuery.V2.Resources {
 		/// <param name="filter">An expression for filtering the results of the request by label. The syntax is "labels.<name>[:<value>]". Multiple filters can be ANDed together by connecting with a space. Example: "labels.department:receiving labels.active". See Filtering datasets using labels for details.</param>
 		/// <param name="maxResults">The maximum number of results to return</param>
 		/// <param name="pageToken">Page token, returned by a previous call, to request the next page of results</param>
-		public Task<BaseResponse<Schema.DatasetList>> ListAsync(string projectId, bool? all, string filter, int? maxResults, string pageToken, CancellationToken cancellationToken) {
+		public Task<BaseResponse<Schema.DatasetList>> ListAsync(string projectId, bool? all, string filter, int? maxResults, string pageToken, JsonSerializerSettings settings = null, CancellationToken cancellationToken = default(CancellationToken)) {
 			if (string.IsNullOrWhiteSpace(projectId)) { throw new ArgumentNullException(nameof(projectId)); }
 
 			string queryString = GetQueryString(new {all, filter, maxResults, pageToken});
 
-			return SendAsync(HttpMethod.Get, $"projects/{projectId}/datasets?{queryString}", null, cancellationToken)
+			return SendAsync(HttpMethod.Get, $"projects/{projectId}/datasets?{queryString}", null, settings, cancellationToken)
 				.ContinueWith(HandleBaseResponse<Schema.DatasetList>, cancellationToken)
 				.Unwrap();
 		}
@@ -79,11 +80,11 @@ namespace TransparentApiClient.Google.BigQuery.V2.Resources {
 		/// </summary>
 		/// <param name="datasetId">Dataset ID of the dataset being updated</param>
 		/// <param name="projectId">Project ID of the dataset being updated</param>
-		public Task<BaseResponse<Schema.Dataset>> PatchAsync(string datasetId, string projectId, Schema.Dataset Dataset, CancellationToken cancellationToken) {
+		public Task<BaseResponse<Schema.Dataset>> PatchAsync(string datasetId, string projectId, Schema.Dataset Dataset, JsonSerializerSettings settings = null, CancellationToken cancellationToken = default(CancellationToken)) {
 			if (string.IsNullOrWhiteSpace(datasetId)) { throw new ArgumentNullException(nameof(datasetId)); }
 			if (string.IsNullOrWhiteSpace(projectId)) { throw new ArgumentNullException(nameof(projectId)); }
 
-			return SendAsync(HttpMethod.Post, $"projects/{projectId}/datasets/{datasetId}", Dataset, cancellationToken)
+			return SendAsync(HttpMethod.Post, $"projects/{projectId}/datasets/{datasetId}", Dataset, settings, cancellationToken)
 				.ContinueWith(HandleBaseResponse<Schema.Dataset>, cancellationToken)
 				.Unwrap();
 		}
@@ -93,11 +94,11 @@ namespace TransparentApiClient.Google.BigQuery.V2.Resources {
 		/// </summary>
 		/// <param name="datasetId">Dataset ID of the dataset being updated</param>
 		/// <param name="projectId">Project ID of the dataset being updated</param>
-		public Task<BaseResponse<Schema.Dataset>> UpdateAsync(string datasetId, string projectId, Schema.Dataset Dataset, CancellationToken cancellationToken) {
+		public Task<BaseResponse<Schema.Dataset>> UpdateAsync(string datasetId, string projectId, Schema.Dataset Dataset, JsonSerializerSettings settings = null, CancellationToken cancellationToken = default(CancellationToken)) {
 			if (string.IsNullOrWhiteSpace(datasetId)) { throw new ArgumentNullException(nameof(datasetId)); }
 			if (string.IsNullOrWhiteSpace(projectId)) { throw new ArgumentNullException(nameof(projectId)); }
 
-			return SendAsync(HttpMethod.Put, $"projects/{projectId}/datasets/{datasetId}", Dataset, cancellationToken)
+			return SendAsync(HttpMethod.Put, $"projects/{projectId}/datasets/{datasetId}", Dataset, settings, cancellationToken)
 				.ContinueWith(HandleBaseResponse<Schema.Dataset>, cancellationToken)
 				.Unwrap();
 		}

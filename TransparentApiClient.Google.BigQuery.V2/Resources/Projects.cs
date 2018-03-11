@@ -2,6 +2,7 @@ using System;
 using System.Threading;
 using System.Net.Http;
 using System.Threading.Tasks;
+using Newtonsoft.Json;
 using TransparentApiClient.Google.Core;
 
 namespace TransparentApiClient.Google.BigQuery.V2.Resources { 
@@ -17,10 +18,10 @@ namespace TransparentApiClient.Google.BigQuery.V2.Resources {
 		/// Returns the email address of the service account for your project used for interactions with Google Cloud KMS.
 		/// </summary>
 		/// <param name="projectId">Project ID for which the service account is requested.</param>
-		public Task<BaseResponse<Schema.GetServiceAccountResponse>> GetServiceAccountAsync(string projectId, CancellationToken cancellationToken) {
+		public Task<BaseResponse<Schema.GetServiceAccountResponse>> GetServiceAccountAsync(string projectId, JsonSerializerSettings settings = null, CancellationToken cancellationToken = default(CancellationToken)) {
 			if (string.IsNullOrWhiteSpace(projectId)) { throw new ArgumentNullException(nameof(projectId)); }
 
-			return SendAsync(HttpMethod.Get, $"projects/{projectId}/serviceAccount", null, cancellationToken)
+			return SendAsync(HttpMethod.Get, $"projects/{projectId}/serviceAccount", null, settings, cancellationToken)
 				.ContinueWith(HandleBaseResponse<Schema.GetServiceAccountResponse>, cancellationToken)
 				.Unwrap();
 		}
@@ -30,11 +31,11 @@ namespace TransparentApiClient.Google.BigQuery.V2.Resources {
 		/// </summary>
 		/// <param name="maxResults">Maximum number of results to return</param>
 		/// <param name="pageToken">Page token, returned by a previous call, to request the next page of results</param>
-		public Task<BaseResponse<Schema.ProjectList>> ListAsync(int? maxResults, string pageToken, CancellationToken cancellationToken) {
+		public Task<BaseResponse<Schema.ProjectList>> ListAsync(int? maxResults, string pageToken, JsonSerializerSettings settings = null, CancellationToken cancellationToken = default(CancellationToken)) {
 
 			string queryString = GetQueryString(new {maxResults, pageToken});
 
-			return SendAsync(HttpMethod.Get, $"projects?{queryString}", null, cancellationToken)
+			return SendAsync(HttpMethod.Get, $"projects?{queryString}", null, settings, cancellationToken)
 				.ContinueWith(HandleBaseResponse<Schema.ProjectList>, cancellationToken)
 				.Unwrap();
 		}

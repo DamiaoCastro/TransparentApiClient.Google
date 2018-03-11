@@ -2,6 +2,7 @@ using System;
 using System.Threading;
 using System.Net.Http;
 using System.Threading.Tasks;
+using Newtonsoft.Json;
 using TransparentApiClient.Google.Core;
 
 namespace TransparentApiClient.Google.BigQuery.V2.Resources { 
@@ -19,12 +20,12 @@ namespace TransparentApiClient.Google.BigQuery.V2.Resources {
 		/// <param name="datasetId">Dataset ID of the destination table.</param>
 		/// <param name="projectId">Project ID of the destination table.</param>
 		/// <param name="tableId">Table ID of the destination table.</param>
-		public Task<BaseResponse<Schema.TableDataInsertAllResponse>> InsertAllAsync(string datasetId, string projectId, string tableId, Schema.TableDataInsertAllRequest TableDataInsertAllRequest, CancellationToken cancellationToken) {
+		public Task<BaseResponse<Schema.TableDataInsertAllResponse>> InsertAllAsync(string datasetId, string projectId, string tableId, Schema.TableDataInsertAllRequest TableDataInsertAllRequest, JsonSerializerSettings settings = null, CancellationToken cancellationToken = default(CancellationToken)) {
 			if (string.IsNullOrWhiteSpace(datasetId)) { throw new ArgumentNullException(nameof(datasetId)); }
 			if (string.IsNullOrWhiteSpace(projectId)) { throw new ArgumentNullException(nameof(projectId)); }
 			if (string.IsNullOrWhiteSpace(tableId)) { throw new ArgumentNullException(nameof(tableId)); }
 
-			return SendAsync(HttpMethod.Post, $"projects/{projectId}/datasets/{datasetId}/tables/{tableId}/insertAll", TableDataInsertAllRequest, cancellationToken)
+			return SendAsync(HttpMethod.Post, $"projects/{projectId}/datasets/{datasetId}/tables/{tableId}/insertAll", TableDataInsertAllRequest, settings, cancellationToken)
 				.ContinueWith(HandleBaseResponse<Schema.TableDataInsertAllResponse>, cancellationToken)
 				.Unwrap();
 		}
@@ -39,14 +40,14 @@ namespace TransparentApiClient.Google.BigQuery.V2.Resources {
 		/// <param name="pageToken">Page token, returned by a previous call, identifying the result set</param>
 		/// <param name="selectedFields">List of fields to return (comma-separated). If unspecified, all fields are returned</param>
 		/// <param name="startIndex">Zero-based index of the starting row to read</param>
-		public Task<BaseResponse<Schema.TableDataList>> ListAsync(string datasetId, string projectId, string tableId, int? maxResults, string pageToken, string selectedFields, string startIndex, CancellationToken cancellationToken) {
+		public Task<BaseResponse<Schema.TableDataList>> ListAsync(string datasetId, string projectId, string tableId, int? maxResults, string pageToken, string selectedFields, string startIndex, JsonSerializerSettings settings = null, CancellationToken cancellationToken = default(CancellationToken)) {
 			if (string.IsNullOrWhiteSpace(datasetId)) { throw new ArgumentNullException(nameof(datasetId)); }
 			if (string.IsNullOrWhiteSpace(projectId)) { throw new ArgumentNullException(nameof(projectId)); }
 			if (string.IsNullOrWhiteSpace(tableId)) { throw new ArgumentNullException(nameof(tableId)); }
 
 			string queryString = GetQueryString(new {maxResults, pageToken, selectedFields, startIndex});
 
-			return SendAsync(HttpMethod.Get, $"projects/{projectId}/datasets/{datasetId}/tables/{tableId}/data?{queryString}", null, cancellationToken)
+			return SendAsync(HttpMethod.Get, $"projects/{projectId}/datasets/{datasetId}/tables/{tableId}/data?{queryString}", null, settings, cancellationToken)
 				.ContinueWith(HandleBaseResponse<Schema.TableDataList>, cancellationToken)
 				.Unwrap();
 		}

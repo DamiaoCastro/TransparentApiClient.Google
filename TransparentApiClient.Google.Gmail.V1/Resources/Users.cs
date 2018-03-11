@@ -2,6 +2,7 @@ using System;
 using System.Threading;
 using System.Net.Http;
 using System.Threading.Tasks;
+using Newtonsoft.Json;
 using TransparentApiClient.Google.Core;
 
 namespace TransparentApiClient.Google.Gmail.V1.Resources { 
@@ -17,10 +18,10 @@ namespace TransparentApiClient.Google.Gmail.V1.Resources {
 		/// Gets the current user's Gmail profile.
 		/// </summary>
 		/// <param name="userId">The user's email address. The special value me can be used to indicate the authenticated user.</param>
-		public Task<BaseResponse<Schema.Profile>> GetProfileAsync(string userId, CancellationToken cancellationToken) {
+		public Task<BaseResponse<Schema.Profile>> GetProfileAsync(string userId, JsonSerializerSettings settings = null, CancellationToken cancellationToken = default(CancellationToken)) {
 			if (string.IsNullOrWhiteSpace(userId)) { throw new ArgumentNullException(nameof(userId)); }
 
-			return SendAsync(HttpMethod.Get, $"{userId}/profile", null, cancellationToken)
+			return SendAsync(HttpMethod.Get, $"{userId}/profile", null, settings, cancellationToken)
 				.ContinueWith(HandleBaseResponse<Schema.Profile>, cancellationToken)
 				.Unwrap();
 		}
@@ -29,10 +30,10 @@ namespace TransparentApiClient.Google.Gmail.V1.Resources {
 		/// Stop receiving push notifications for the given user mailbox.
 		/// </summary>
 		/// <param name="userId">The user's email address. The special value me can be used to indicate the authenticated user.</param>
-		public Task<BaseResponse<object>> StopAsync(string userId, CancellationToken cancellationToken) {
+		public Task<BaseResponse<object>> StopAsync(string userId, JsonSerializerSettings settings = null, CancellationToken cancellationToken = default(CancellationToken)) {
 			if (string.IsNullOrWhiteSpace(userId)) { throw new ArgumentNullException(nameof(userId)); }
 
-			return SendAsync(HttpMethod.Post, $"{userId}/stop", null, cancellationToken)
+			return SendAsync(HttpMethod.Post, $"{userId}/stop", null, settings, cancellationToken)
 				.ContinueWith(HandleBaseResponse<object>, cancellationToken)
 				.Unwrap();
 		}
@@ -41,10 +42,10 @@ namespace TransparentApiClient.Google.Gmail.V1.Resources {
 		/// Set up or update a push notification watch on the given user mailbox.
 		/// </summary>
 		/// <param name="userId">The user's email address. The special value me can be used to indicate the authenticated user.</param>
-		public Task<BaseResponse<Schema.WatchResponse>> WatchAsync(string userId, Schema.WatchRequest WatchRequest, CancellationToken cancellationToken) {
+		public Task<BaseResponse<Schema.WatchResponse>> WatchAsync(string userId, Schema.WatchRequest WatchRequest, JsonSerializerSettings settings = null, CancellationToken cancellationToken = default(CancellationToken)) {
 			if (string.IsNullOrWhiteSpace(userId)) { throw new ArgumentNullException(nameof(userId)); }
 
-			return SendAsync(HttpMethod.Post, $"{userId}/watch", WatchRequest, cancellationToken)
+			return SendAsync(HttpMethod.Post, $"{userId}/watch", WatchRequest, settings, cancellationToken)
 				.ContinueWith(HandleBaseResponse<Schema.WatchResponse>, cancellationToken)
 				.Unwrap();
 		}

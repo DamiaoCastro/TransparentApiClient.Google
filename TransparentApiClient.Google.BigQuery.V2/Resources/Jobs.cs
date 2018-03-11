@@ -2,6 +2,7 @@ using System;
 using System.Threading;
 using System.Net.Http;
 using System.Threading.Tasks;
+using Newtonsoft.Json;
 using TransparentApiClient.Google.Core;
 
 namespace TransparentApiClient.Google.BigQuery.V2.Resources { 
@@ -19,13 +20,13 @@ namespace TransparentApiClient.Google.BigQuery.V2.Resources {
 		/// <param name="jobId">[Required] Job ID of the job to cancel</param>
 		/// <param name="projectId">[Required] Project ID of the job to cancel</param>
 		/// <param name="location">[Experimental] The geographic location of the job. Required except for US and EU.</param>
-		public Task<BaseResponse<Schema.JobCancelResponse>> CancelAsync(string jobId, string projectId, string location, CancellationToken cancellationToken) {
+		public Task<BaseResponse<Schema.JobCancelResponse>> CancelAsync(string jobId, string projectId, string location, JsonSerializerSettings settings = null, CancellationToken cancellationToken = default(CancellationToken)) {
 			if (string.IsNullOrWhiteSpace(jobId)) { throw new ArgumentNullException(nameof(jobId)); }
 			if (string.IsNullOrWhiteSpace(projectId)) { throw new ArgumentNullException(nameof(projectId)); }
 
 			string queryString = GetQueryString(new {location});
 
-			return SendAsync(HttpMethod.Post, $"projects/{projectId}/jobs/{jobId}/cancel?{queryString}", null, cancellationToken)
+			return SendAsync(HttpMethod.Post, $"projects/{projectId}/jobs/{jobId}/cancel?{queryString}", null, settings, cancellationToken)
 				.ContinueWith(HandleBaseResponse<Schema.JobCancelResponse>, cancellationToken)
 				.Unwrap();
 		}
@@ -36,13 +37,13 @@ namespace TransparentApiClient.Google.BigQuery.V2.Resources {
 		/// <param name="jobId">[Required] Job ID of the requested job</param>
 		/// <param name="projectId">[Required] Project ID of the requested job</param>
 		/// <param name="location">[Experimental] The geographic location of the job. Required except for US and EU.</param>
-		public Task<BaseResponse<Schema.Job>> GetAsync(string jobId, string projectId, string location, CancellationToken cancellationToken) {
+		public Task<BaseResponse<Schema.Job>> GetAsync(string jobId, string projectId, string location, JsonSerializerSettings settings = null, CancellationToken cancellationToken = default(CancellationToken)) {
 			if (string.IsNullOrWhiteSpace(jobId)) { throw new ArgumentNullException(nameof(jobId)); }
 			if (string.IsNullOrWhiteSpace(projectId)) { throw new ArgumentNullException(nameof(projectId)); }
 
 			string queryString = GetQueryString(new {location});
 
-			return SendAsync(HttpMethod.Get, $"projects/{projectId}/jobs/{jobId}?{queryString}", null, cancellationToken)
+			return SendAsync(HttpMethod.Get, $"projects/{projectId}/jobs/{jobId}?{queryString}", null, settings, cancellationToken)
 				.ContinueWith(HandleBaseResponse<Schema.Job>, cancellationToken)
 				.Unwrap();
 		}
@@ -57,13 +58,13 @@ namespace TransparentApiClient.Google.BigQuery.V2.Resources {
 		/// <param name="pageToken">Page token, returned by a previous call, to request the next page of results</param>
 		/// <param name="startIndex">Zero-based index of the starting row</param>
 		/// <param name="timeoutMs">How long to wait for the query to complete, in milliseconds, before returning. Default is 10 seconds. If the timeout passes before the job completes, the 'jobComplete' field in the response will be false</param>
-		public Task<BaseResponse<Schema.GetQueryResultsResponse>> GetQueryResultsAsync(string jobId, string projectId, string location, int? maxResults, string pageToken, string startIndex, int? timeoutMs, CancellationToken cancellationToken) {
+		public Task<BaseResponse<Schema.GetQueryResultsResponse>> GetQueryResultsAsync(string jobId, string projectId, string location, int? maxResults, string pageToken, string startIndex, int? timeoutMs, JsonSerializerSettings settings = null, CancellationToken cancellationToken = default(CancellationToken)) {
 			if (string.IsNullOrWhiteSpace(jobId)) { throw new ArgumentNullException(nameof(jobId)); }
 			if (string.IsNullOrWhiteSpace(projectId)) { throw new ArgumentNullException(nameof(projectId)); }
 
 			string queryString = GetQueryString(new {location, maxResults, pageToken, startIndex, timeoutMs});
 
-			return SendAsync(HttpMethod.Get, $"projects/{projectId}/queries/{jobId}?{queryString}", null, cancellationToken)
+			return SendAsync(HttpMethod.Get, $"projects/{projectId}/queries/{jobId}?{queryString}", null, settings, cancellationToken)
 				.ContinueWith(HandleBaseResponse<Schema.GetQueryResultsResponse>, cancellationToken)
 				.Unwrap();
 		}
@@ -72,10 +73,10 @@ namespace TransparentApiClient.Google.BigQuery.V2.Resources {
 		/// Starts a new asynchronous job. Requires the Can View project role.
 		/// </summary>
 		/// <param name="projectId">Project ID of the project that will be billed for the job</param>
-		public Task<BaseResponse<Schema.Job>> InsertAsync(string projectId, Schema.Job Job, CancellationToken cancellationToken) {
+		public Task<BaseResponse<Schema.Job>> InsertAsync(string projectId, Schema.Job Job, JsonSerializerSettings settings = null, CancellationToken cancellationToken = default(CancellationToken)) {
 			if (string.IsNullOrWhiteSpace(projectId)) { throw new ArgumentNullException(nameof(projectId)); }
 
-			return SendAsync(HttpMethod.Post, $"projects/{projectId}/jobs", Job, cancellationToken)
+			return SendAsync(HttpMethod.Post, $"projects/{projectId}/jobs", Job, settings, cancellationToken)
 				.ContinueWith(HandleBaseResponse<Schema.Job>, cancellationToken)
 				.Unwrap();
 		}
@@ -85,16 +86,18 @@ namespace TransparentApiClient.Google.BigQuery.V2.Resources {
 		/// </summary>
 		/// <param name="projectId">Project ID of the jobs to list</param>
 		/// <param name="allUsers">Whether to display jobs owned by all users in the project. Default false</param>
+		/// <param name="maxCreationTime">Max value for job creation time, in milliseconds since the POSIX epoch. If set, only jobs created before or at this timestamp are returned</param>
 		/// <param name="maxResults">Maximum number of results to return</param>
+		/// <param name="minCreationTime">Min value for job creation time, in milliseconds since the POSIX epoch. If set, only jobs created after or at this timestamp are returned</param>
 		/// <param name="pageToken">Page token, returned by a previous call, to request the next page of results</param>
 		/// <param name="projection">Restrict information returned to a set of selected fields</param>
 		/// <param name="stateFilter">Filter for job state</param>
-		public Task<BaseResponse<Schema.JobList>> ListAsync(string projectId, bool? allUsers, int? maxResults, string pageToken, string projection, string stateFilter, CancellationToken cancellationToken) {
+		public Task<BaseResponse<Schema.JobList>> ListAsync(string projectId, bool? allUsers, string maxCreationTime, int? maxResults, string minCreationTime, string pageToken, string projection, string stateFilter, JsonSerializerSettings settings = null, CancellationToken cancellationToken = default(CancellationToken)) {
 			if (string.IsNullOrWhiteSpace(projectId)) { throw new ArgumentNullException(nameof(projectId)); }
 
-			string queryString = GetQueryString(new {allUsers, maxResults, pageToken, projection, stateFilter});
+			string queryString = GetQueryString(new {allUsers, maxCreationTime, maxResults, minCreationTime, pageToken, projection, stateFilter});
 
-			return SendAsync(HttpMethod.Get, $"projects/{projectId}/jobs?{queryString}", null, cancellationToken)
+			return SendAsync(HttpMethod.Get, $"projects/{projectId}/jobs?{queryString}", null, settings, cancellationToken)
 				.ContinueWith(HandleBaseResponse<Schema.JobList>, cancellationToken)
 				.Unwrap();
 		}
@@ -103,10 +106,10 @@ namespace TransparentApiClient.Google.BigQuery.V2.Resources {
 		/// Runs a BigQuery SQL query synchronously and returns query results if the query completes within a specified timeout.
 		/// </summary>
 		/// <param name="projectId">Project ID of the project billed for the query</param>
-		public Task<BaseResponse<Schema.QueryResponse>> QueryAsync(string projectId, Schema.QueryRequest QueryRequest, CancellationToken cancellationToken) {
+		public Task<BaseResponse<Schema.QueryResponse>> QueryAsync(string projectId, Schema.QueryRequest QueryRequest, JsonSerializerSettings settings = null, CancellationToken cancellationToken = default(CancellationToken)) {
 			if (string.IsNullOrWhiteSpace(projectId)) { throw new ArgumentNullException(nameof(projectId)); }
 
-			return SendAsync(HttpMethod.Post, $"projects/{projectId}/queries", QueryRequest, cancellationToken)
+			return SendAsync(HttpMethod.Post, $"projects/{projectId}/queries", QueryRequest, settings, cancellationToken)
 				.ContinueWith(HandleBaseResponse<Schema.QueryResponse>, cancellationToken)
 				.Unwrap();
 		}

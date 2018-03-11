@@ -140,7 +140,9 @@ namespace TransparentApiClient.Google.SchemasFileGenerator {
             //description
             var descriptionString = string.Empty;
             if (!string.IsNullOrWhiteSpace(token.Value.description)) {
-                descriptionString = $"/// <summary>{newLine}\t\t/// {token.Value.description}{newLine}\t\t/// </summary>";
+                var descriptionLines = token.Value.description.Split("\n");
+
+                descriptionString = $"/// <summary>{newLine}\t\t/// {string.Join($"{newLine}\t\t///", descriptionLines)}{newLine}\t\t/// </summary>";
             }
 
             //optional
