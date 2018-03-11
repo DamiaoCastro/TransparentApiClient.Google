@@ -1,6 +1,7 @@
 ﻿using System.Net;
 
 namespace TransparentApiClient.Google.Core {
+
     public class BaseResponse<S> {
 
         public bool Success { get; internal set; }

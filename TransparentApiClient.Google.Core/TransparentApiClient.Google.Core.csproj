@@ -2,11 +2,12 @@
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
-    <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <Authors>Damiao Castro</Authors>
     <Company>fowet.com</Company>
     <PackageProjectUrl>https://github.com/DamiaoCastro/TransparentApiClient.Google</PackageProjectUrl>
     <Description>core functionality for TransparentApiClient for Google products</Description>
+    <Version>1.0.1</Version>
   </PropertyGroup>
 
   <ItemGroup>

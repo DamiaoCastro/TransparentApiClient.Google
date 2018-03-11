@@ -2,24 +2,23 @@
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace TransparentApiClient.Google.Core
-{
-    public abstract class BaseClient : IDisposable
-    {
+namespace TransparentApiClient.Google.Core {
+
+    public abstract class BaseClient : IDisposable {
 
         private readonly byte[] serviceAccountCredentials;
         private readonly string baseUri;
         private readonly IEnumerable<string> scopes;
         private HttpClient httpClient = null;
 
-        public BaseClient(byte[] serviceAccountCredentials, string baseUri, IEnumerable<string> scopes)
-        {
+        public BaseClient(byte[] serviceAccountCredentials, string baseUri, IEnumerable<string> scopes) {
             this.serviceAccountCredentials = serviceAccountCredentials ?? throw new ArgumentNullException(nameof(serviceAccountCredentials));
             if (string.IsNullOrWhiteSpace(baseUri)) { throw new ArgumentNullException(nameof(baseUri)); }
             this.scopes = scopes ?? throw new ArgumentNullException(nameof(scopes));
@@ -27,57 +26,83 @@ namespace TransparentApiClient.Google.Core
             this.baseUri = baseUri;
         }
 
-        protected Task<HttpResponseMessage> SendAsync(HttpMethod httpMethod, string partialUri, object requestBodyObject = null, CancellationToken cancellationToken = default(CancellationToken))
-        {
+        protected Task<HttpResponseMessage> SendAsync(HttpMethod httpMethod, string partialUri, object requestBodyObject = null, CancellationToken cancellationToken = default(CancellationToken)) {
 
             var _httpClient = GetHttpClient();
 
             HttpContent content = null;
-            if (requestBodyObject != null)
-            {
-                content = new StringContent(JsonConvert.SerializeObject(requestBodyObject), System.Text.Encoding.UTF8, "application/json");
+            if (requestBodyObject != null) {
+                //content = new StringContent(JsonConvert.SerializeObject(requestBodyObject), System.Text.Encoding.UTF8, "application/json");
+
+                byte[] compressedBodyBytes;
+                using (var memoryStream = new System.IO.MemoryStream()) {
+                    var requestBodyObjectBytes = System.Text.Encoding.UTF8.GetBytes(JsonConvert.SerializeObject(requestBodyObject));
+                    using (var zipStream = new System.IO.Compression.GZipStream(memoryStream, System.IO.Compression.CompressionMode.Compress)) {
+                        zipStream.Write(requestBodyObjectBytes, 0, requestBodyObjectBytes.Length);
+                    }
+                    compressedBodyBytes = memoryStream.ToArray();
+                }
+
+                content = new ByteArrayContent(compressedBodyBytes);
             }
 
             var request = new HttpRequestMessage() { RequestUri = new Uri($"{baseUri}{partialUri}"), Method = httpMethod, Content = content };
+            request.Content.Headers.ContentEncoding.Add("gzip");
+            request.Headers.AcceptEncoding.Add(new StringWithQualityHeaderValue("gzip"));
 
             return _httpClient.SendAsync(request, cancellationToken);
         }
 
-        protected Task<BaseResponse<T>> HandleBaseResponse<T>(Task<HttpResponseMessage> sendTask)
-        {
+        protected Task<BaseResponse<T>> HandleBaseResponse<T>(Task<HttpResponseMessage> sendTask) {
 
             var response = sendTask.Result;
 
             var baseResponse = new BaseResponse<T>() { Success = false };
             baseResponse.ResponseCode = response.StatusCode;
             baseResponse.Success = response.IsSuccessStatusCode;
+            if (response.Content.Headers.ContentEncoding.Contains("gzip")) {
 
-            return response.Content.ReadAsStringAsync()
-                    .ContinueWith((readTask) =>
-                    {
+                return response.Content.ReadAsByteArrayAsync()
+                    .ContinueWith((readAsByteArrayTask) => {
+                        byte[] resultByteArray = readAsByteArrayTask.Result;
 
-                        string responseBody = readTask.Result;
-                        if (baseResponse.Success)
-                        {
-                            baseResponse.Response = JsonConvert.DeserializeObject<T>(responseBody);
-                        }
-                        else
-                        {
-                            baseResponse.Error = JsonConvert.DeserializeObject<ErrorSuper>(responseBody).error;
+                        var memoryStream = new MemoryStream();
+                        using (var zipStream = new System.IO.Compression.GZipStream(new MemoryStream(resultByteArray), System.IO.Compression.CompressionMode.Decompress)) {
+                            zipStream.CopyTo(memoryStream);
                         }
 
-                        return baseResponse;
+                        string responseBody = System.Text.Encoding.UTF8.GetString(memoryStream.ToArray());
+                        return GetResponse(baseResponse, responseBody);
                     });
 
+
+            } else {
+                return response.Content.ReadAsStringAsync()
+                    .ContinueWith((readTask) => {
+
+                        string responseBody = readTask.Result;
+                        return GetResponse(baseResponse, responseBody);
+
+                    });
+
+            }
         }
 
-        private class ErrorSuper
-        {
+        private static BaseResponse<T> GetResponse<T>(BaseResponse<T> baseResponse, string responseBody) {
+            if (baseResponse.Success) {
+                baseResponse.Response = JsonConvert.DeserializeObject<T>(responseBody);
+            } else {
+                baseResponse.Error = JsonConvert.DeserializeObject<ErrorSuper>(responseBody).error;
+            }
+
+            return baseResponse;
+        }
+
+        private class ErrorSuper {
             public ErrorResponse error { get; set; }
         }
 
-        protected string GetQueryString(object parameters)
-        {
+        protected string GetQueryString(object parameters) {
 
             var queryParameters = from c in parameters.GetType().GetProperties()
                                   let value = c.GetValue(parameters)
@@ -89,8 +114,7 @@ namespace TransparentApiClient.Google.Core
         }
 
         DateTime t1 = DateTime.UtcNow;
-        private HttpClient GetHttpClient()
-        {
+        private HttpClient GetHttpClient() {
             if ((DateTime.UtcNow - t1).TotalHours > 1)//get new http client and new credentials every hour
             {
                 httpClient.Dispose();
@@ -98,8 +122,7 @@ namespace TransparentApiClient.Google.Core
                 t1 = DateTime.UtcNow;
             }
 
-            if (httpClient == null)
-            {
+            if (httpClient == null) {
                 var googleCredential = GoogleCredential.FromStream(new System.IO.MemoryStream(serviceAccountCredentials)).CreateScoped(scopes);
                 var accessToken = googleCredential.UnderlyingCredential.GetAccessTokenForRequestAsync().Result;
 
@@ -109,8 +132,7 @@ namespace TransparentApiClient.Google.Core
             return httpClient;
         }
 
-        void IDisposable.Dispose()
-        {
+        void IDisposable.Dispose() {
             httpClient?.Dispose();
         }
 
