@@ -59,7 +59,7 @@ namespace TransparentApiClient.Google.SchemasFileGenerator {
                     Task.Run(() => {
 
                         var url = "https://www.googleapis.com/discovery/v1/apis/pubsub/v1/rest";
-                        var basePath = @"..\TransparentApiClient.Google.PubSub.V1";
+                        var basePath = @"..\..\..\..\TransparentApiClient.Google.PubSub.V1";
                         var @namespace = "TransparentApiClient.Google.PubSub.V1";
                         WriteFiles(url, basePath, @namespace);
 
@@ -85,7 +85,7 @@ namespace TransparentApiClient.Google.SchemasFileGenerator {
                 }
             }
 
-            //api
+            //resources
             {
                 var codeGeneratorService = new ApiCodeGeneratorService(@namespace);
                 foreach ((string id, string fileContent) in codeGeneratorService.GetFileContents(googleApiDiscover)) {

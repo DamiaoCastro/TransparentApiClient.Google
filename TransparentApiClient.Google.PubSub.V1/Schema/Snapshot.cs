@@ -5,6 +5,11 @@ namespace TransparentApiClient.Google.PubSub.V1.Schema {
 	public class Snapshot { 
 
 		/// <summary>
+		/// The name of the topic from which this snapshot is retaining messages.
+		/// </summary>
+		public string topic { get; set; }
+
+		/// <summary>
 		/// The snapshot is guaranteed to exist up until this time.
 		///A newly-created snapshot expires no later than 7 days from the time of its
 		///creation. Its exact lifetime is determined at creation by the existing
@@ -22,11 +27,6 @@ namespace TransparentApiClient.Google.PubSub.V1.Schema {
 		/// The name of the snapshot.
 		/// </summary>
 		public string name { get; set; }
-
-		/// <summary>
-		/// The name of the topic from which this snapshot is retaining messages.
-		/// </summary>
-		public string topic { get; set; }
 
 	}
 }

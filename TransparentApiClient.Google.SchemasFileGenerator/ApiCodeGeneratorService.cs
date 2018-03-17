@@ -18,9 +18,18 @@ namespace TransparentApiClient.Google.SchemasFileGenerator {
 
             foreach (KeyValuePair<string, GoogleApiDiscoverResource> schemaProperty in googleApiDiscover.resources) {
 
-                Console.WriteLine($"resources property '{schemaProperty.Key}'");
+                if (schemaProperty.Value.resources != null) {
+                    foreach (KeyValuePair<string, GoogleApiDiscoverResource> schemaProperty1 in schemaProperty.Value.resources) {
+                        Console.WriteLine($"resources property '{schemaProperty1.Key}'");
 
-                yield return GetClassCodeString(googleApiDiscover, schemaProperty);
+                        yield return GetClassCodeString(googleApiDiscover, schemaProperty1);
+                    }
+                }
+
+                if (schemaProperty.Value.methods != null) {
+                    Console.WriteLine($"resources property '{schemaProperty.Key}'");
+                    yield return GetClassCodeString(googleApiDiscover, schemaProperty);
+                }
             }
 
         }
@@ -140,6 +149,9 @@ namespace TransparentApiClient.Google.SchemasFileGenerator {
             if (!string.IsNullOrWhiteSpace(method.description)) {
 
                 var descriptionLines = method.description.Split(Environment.NewLine);
+                if (descriptionLines.Count() == 1) {
+                    descriptionLines = method.description.Split('\n');
+                }
 
                 description.AppendLine($"\t\t/// <summary>{newLine}\t\t/// {string.Join($"{newLine}\t\t///", descriptionLines)}{newLine}\t\t/// </summary>");
                 foreach (var item in method.parameters.Where(c => c.Value.location == "path")) {

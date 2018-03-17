@@ -64,6 +64,7 @@ namespace TransparentApiClient.Google.SchemasFileGenerator {
 
     internal class GoogleApiDiscoverResource {
         public Dictionary<string, GoogleApiDiscoverMethod> methods { get; set; }
+        public Dictionary<string, GoogleApiDiscoverResource> resources { get; set; }
     }
 
     internal class GoogleApiDiscoverMethod {

@@ -8,4 +8,8 @@
     <ProjectReference Include="..\TransparentApiClient.Google.Core\TransparentApiClient.Google.Core.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Resources\" />
+  </ItemGroup>
+
 </Project>
