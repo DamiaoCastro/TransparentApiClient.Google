@@ -7,7 +7,7 @@
     <Company>fowet.com</Company>
     <PackageProjectUrl>https://github.com/DamiaoCastro/TransparentApiClient.Google</PackageProjectUrl>
     <Description>core functionality for TransparentApiClient for Google products</Description>
-    <Version>1.0.3</Version>
+    <Version>1.0.4</Version>
   </PropertyGroup>
 
   <ItemGroup>
