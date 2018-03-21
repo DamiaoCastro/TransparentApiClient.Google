@@ -70,6 +70,11 @@ namespace TransparentApiClient.Google.BigQuery.V2.Schema {
 		public string totalBytesProcessed { get; set; }
 
 		/// <summary>
+		/// [Output-only] Total number of partitions processed from all partitioned tables referenced in the job.
+		/// </summary>
+		public string totalPartitionsProcessed { get; set; }
+
+		/// <summary>
 		/// [Output-only] Slot-milliseconds for the job.
 		/// </summary>
 		public string totalSlotMs { get; set; }

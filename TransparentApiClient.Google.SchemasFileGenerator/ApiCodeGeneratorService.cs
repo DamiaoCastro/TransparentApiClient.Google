@@ -137,7 +137,7 @@ namespace TransparentApiClient.Google.SchemasFileGenerator {
             }
 
             //remaining function body
-            methodBuilder.AppendLine($"{newLine}\t\t\treturn SendAsync(HttpMethod.{httpMethod}, $\"{method.path}{queryStringOnPath}\", {requestBodyVar}, settings, cancellationToken)");
+            methodBuilder.AppendLine($"{newLine}\t\t\treturn SendAsync(HttpMethod.{httpMethod}, $\"{method.path.Replace("{+", "{")}{queryStringOnPath}\", {requestBodyVar}, settings, cancellationToken)");
             methodBuilder.AppendLine($"\t\t\t\t.ContinueWith(HandleBaseResponse<{responseClass}>, cancellationToken)");
             methodBuilder.AppendLine($"\t\t\t\t.Unwrap();{newLine}\t\t}}");
 
@@ -148,21 +148,27 @@ namespace TransparentApiClient.Google.SchemasFileGenerator {
             var description = new StringBuilder();
             if (!string.IsNullOrWhiteSpace(method.description)) {
 
-                var descriptionLines = method.description.Split(Environment.NewLine);
-                if (descriptionLines.Count() == 1) {
-                    descriptionLines = method.description.Split('\n');
-                }
+                string[] descriptionLines = GetMultipleLines(method.description);
 
                 description.AppendLine($"\t\t/// <summary>{newLine}\t\t/// {string.Join($"{newLine}\t\t///", descriptionLines)}{newLine}\t\t/// </summary>");
                 foreach (var item in method.parameters.Where(c => c.Value.location == "path")) {
-                    description.AppendLine($"\t\t/// <param name=\"{item.Key}\">{item.Value.description}</param>");
+                    description.AppendLine($"\t\t/// <param name=\"{item.Key}\">{string.Join($"{newLine}\t\t///", GetMultipleLines(item.Value.description))}</param>");
                 }
                 foreach (var item in method.parameters.Where(c => c.Value.location != "path")) {
-                    description.AppendLine($"\t\t/// <param name=\"{item.Key}\">{item.Value.description}</param>");
+                    description.AppendLine($"\t\t/// <param name=\"{item.Key}\">{string.Join($"{newLine}\t\t///", GetMultipleLines(item.Value.description))}</param>");
                 }
             }
 
             return description.ToString();
+        }
+
+        private static string[] GetMultipleLines(string text) {
+            var descriptionLines = text.Split(Environment.NewLine);
+            if (descriptionLines.Count() == 1) {
+                descriptionLines = text.Split('\n');
+            }
+
+            return descriptionLines;
         }
 
         private string GetHttpMethod(GoogleApiDiscoverMethod method) {

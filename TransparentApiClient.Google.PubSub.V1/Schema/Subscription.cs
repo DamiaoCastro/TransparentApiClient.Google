@@ -5,6 +5,24 @@ namespace TransparentApiClient.Google.PubSub.V1.Schema {
 	public class Subscription { 
 
 		/// <summary>
+		/// How long to retain unacknowledged messages in the subscription's backlog,
+		///from the moment a message is published.
+		///If `retain_acked_messages` is true, then this also configures the retention
+		///of acknowledged messages, and thus configures how far back in time a `Seek`
+		///can be done. Defaults to 7 days. Cannot be more than 7 days or less than 10
+		///minutes.
+		/// </summary>
+		public string messageRetentionDuration { get; set; }
+
+		/// <summary>
+		/// Indicates whether to retain acknowledged messages. If true, then
+		///messages are not expunged from the subscription's backlog, even if they are
+		///acknowledged, until they fall out of the `message_retention_duration`
+		///window.
+		/// </summary>
+		public bool retainAckedMessages { get; set; }
+
+		/// <summary>
 		/// The name of the subscription. It must have the format
 		///`"projects/{project}/subscriptions/{subscription}"`. `{subscription}` must
 		///start with a letter, and contain only letters (`[A-Za-z]`), numbers
@@ -52,24 +70,6 @@ namespace TransparentApiClient.Google.PubSub.V1.Schema {
 		///system will eventually redeliver the message.
 		/// </summary>
 		public int ackDeadlineSeconds { get; set; }
-
-		/// <summary>
-		/// How long to retain unacknowledged messages in the subscription's backlog,
-		///from the moment a message is published.
-		///If `retain_acked_messages` is true, then this also configures the retention
-		///of acknowledged messages, and thus configures how far back in time a `Seek`
-		///can be done. Defaults to 7 days. Cannot be more than 7 days or less than 10
-		///minutes.
-		/// </summary>
-		public string messageRetentionDuration { get; set; }
-
-		/// <summary>
-		/// Indicates whether to retain acknowledged messages. If true, then
-		///messages are not expunged from the subscription's backlog, even if they are
-		///acknowledged, until they fall out of the `message_retention_duration`
-		///window.
-		/// </summary>
-		public bool retainAckedMessages { get; set; }
 
 	}
 }

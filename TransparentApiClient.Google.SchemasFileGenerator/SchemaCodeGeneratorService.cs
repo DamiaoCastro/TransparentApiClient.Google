@@ -39,8 +39,7 @@ namespace TransparentApiClient.Google.SchemasFileGenerator {
 
         string GetClassCodeString(string id, GoogleApiDiscoverSchema schema) {
 
-            //IEnumerable<JToken> properties = children.properties;
-            if (schema.properties != null && schema.properties.Count() > 0) {
+            if (schema.properties != null /*&& schema.properties.Count() > 0*/) {
 
                 var adicionalClasses = new List<string>();
                 var fileContent = new StringBuilder($"\tpublic class {id} {{ {newLine}{newLine}");

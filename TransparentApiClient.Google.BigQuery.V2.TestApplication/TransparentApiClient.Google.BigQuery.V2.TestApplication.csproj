@@ -8,10 +8,14 @@
   <ItemGroup>
     <ProjectReference Include="..\TransparentApiClient.Google.BigQuery.V2\TransparentApiClient.Google.BigQuery.V2.csproj" />
     <ProjectReference Include="..\TransparentApiClient.Google.Gmail.V1\TransparentApiClient.Google.Gmail.V1.csproj" />
+    <ProjectReference Include="..\TransparentApiClient.Google.PubSub.V1\TransparentApiClient.Google.PubSub.V1.csproj" />
   </ItemGroup>
 
   <ItemGroup>
-    <None Update="credencials.json">
+    <None Update="bigquery-admin.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="pubsub-admin.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
   </ItemGroup>

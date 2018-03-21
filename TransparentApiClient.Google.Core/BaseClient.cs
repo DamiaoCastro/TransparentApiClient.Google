@@ -92,7 +92,11 @@ namespace TransparentApiClient.Google.Core {
             if (baseResponse.Success) {
                 baseResponse.Response = JsonConvert.DeserializeObject<T>(responseBody);
             } else {
-                baseResponse.Error = JsonConvert.DeserializeObject<ErrorSuper>(responseBody).error;
+                try {
+                    baseResponse.Error = JsonConvert.DeserializeObject<ErrorSuper>(responseBody).error;
+                } catch (Exception) {
+                    baseResponse.ErrorText = responseBody;
+                }
             }
 
             return baseResponse;

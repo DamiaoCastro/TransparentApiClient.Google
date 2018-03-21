@@ -70,6 +70,7 @@ namespace TransparentApiClient.Google.SchemasFileGenerator {
     internal class GoogleApiDiscoverMethod {
         public string id { get; set; }
         public string path { get; set; }
+        public string flatPath { get; set; }
         public string httpMethod { get; set; }
         public string description { get; set; }
         public Dictionary<string, GoogleApiDiscoverMethodParameter> parameters { get; set; }

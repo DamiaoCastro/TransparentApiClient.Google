@@ -35,7 +35,7 @@ namespace TransparentApiClient.Google.SchemasFileGenerator {
 
                     Task.Run(() => {
                         var url = "https://www.googleapis.com/discovery/v1/apis/bigquery/v2/rest";
-                        var basePath = @"..\TransparentApiClient.Google.BigQuery.V2";
+                        var basePath = @"..\..\..\..\TransparentApiClient.Google.BigQuery.V2";
                         var @namespace = "TransparentApiClient.Google.BigQuery.V2";
                         WriteFiles(url, basePath, @namespace);
 
@@ -47,7 +47,7 @@ namespace TransparentApiClient.Google.SchemasFileGenerator {
                     Task.Run(() => {
 
                         var url = "https://www.googleapis.com/discovery/v1/apis/gmail/v1/rest";
-                        var basePath = @"..\TransparentApiClient.Google.Gmail.V1";
+                        var basePath = @"..\..\..\..\TransparentApiClient.Google.Gmail.V1";
                         var @namespace = "TransparentApiClient.Google.Gmail.V1";
                         WriteFiles(url, basePath, @namespace);
 
@@ -106,17 +106,18 @@ namespace TransparentApiClient.Google.SchemasFileGenerator {
             return Console.ReadKey();
         }
 
-        static async Task<GoogleApiDiscover> GetApiDiscover(string url) {
-            HttpResponseMessage httpResponse;
-            using (var httpClient = new HttpClient()) {
-                httpResponse = await httpClient.GetAsync(new Uri(url));
-            }
+        static Task<GoogleApiDiscover> GetApiDiscover(string url) {
+            //HttpResponseMessage httpResponse;
+            //using (var httpClient = new HttpClient()) {
+            //    httpResponse = await httpClient.GetAsync(new Uri(url));
+            //}
 
-            string responseContent = await httpResponse.Content.ReadAsStringAsync();
-            //string responseContent = System.IO.File.ReadAllText("gmail-api.json");
+            //string responseContent = await httpResponse.Content.ReadAsStringAsync();
+            string responseContent = System.IO.File.ReadAllText("pubsub-api.json");
             GoogleApiDiscover googleApiDiscover = JsonConvert.DeserializeObject<GoogleApiDiscover>(responseContent,
                 new JsonSerializerSettings() { MetadataPropertyHandling = MetadataPropertyHandling.Ignore });
-            return googleApiDiscover;
+            //return googleApiDiscover;
+            return Task.FromResult(googleApiDiscover);
         }
 
     }

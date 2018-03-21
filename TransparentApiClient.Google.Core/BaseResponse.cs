@@ -12,5 +12,7 @@ namespace TransparentApiClient.Google.Core {
 
         public ErrorResponse Error { get; internal set; }
 
+        public string ErrorText { get; internal set; }
+
     }
 }
