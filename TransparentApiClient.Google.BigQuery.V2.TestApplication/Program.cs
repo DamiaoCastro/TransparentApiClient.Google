@@ -75,8 +75,8 @@ namespace TransparentApiClient.Google.BigQuery.V2.TestApplication {
                     new PubSub.V1.Schema.PublishRequest() {
                         messages = new List<PubSub.V1.Schema.PubsubMessage>() {
                         new PubSub.V1.Schema.PubsubMessage(){
-                                //data =Convert.ToBase64String(System.Text.Encoding.UTF8.GetBytes( "test")),
-                                data = Convert.ToBase64String(System.Text.Encoding.UTF8.GetBytes( System.IO.File.ReadAllText(@"pubsub-admin.json"))),
+                                data =Convert.ToBase64String(System.Text.Encoding.UTF8.GetBytes( "test")),
+                                //data = Convert.ToBase64String(System.Text.Encoding.UTF8.GetBytes( System.IO.File.ReadAllText(@"pubsub-admin.json"))),
                             }
                         }
                     },
@@ -100,8 +100,7 @@ namespace TransparentApiClient.Google.BigQuery.V2.TestApplication {
                 IEnumerable<string> ackIds = response.Response.receivedMessages.Select(c => c.ackId);
 
                 Console.WriteLine($"success: {response.Success}, messages:{string.Join(',', response.Response.receivedMessages.Select(c => System.Text.Encoding.UTF8.GetString(Convert.FromBase64String(c.message.data))))}");
-
-
+                
                 var ack = subscriptionsClient.AcknowledgeAsync(subscription,
                        new PubSub.V1.Schema.AcknowledgeRequest() {
                            ackIds = ackIds

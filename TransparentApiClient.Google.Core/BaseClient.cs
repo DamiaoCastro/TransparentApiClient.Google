@@ -9,19 +9,16 @@ using System.Net.Http.Headers;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace TransparentApiClient.Google.Core
-{
+namespace TransparentApiClient.Google.Core {
 
-    public abstract class BaseClient : IDisposable
-    {
+    public abstract class BaseClient : IDisposable {
 
         private readonly byte[] serviceAccountCredentials;
         private readonly string baseUri;
         private readonly IEnumerable<string> scopes;
         private HttpClient httpClient = null;
 
-        public BaseClient(byte[] serviceAccountCredentials, string baseUri, IEnumerable<string> scopes)
-        {
+        public BaseClient(byte[] serviceAccountCredentials, string baseUri, IEnumerable<string> scopes) {
             this.serviceAccountCredentials = serviceAccountCredentials ?? throw new ArgumentNullException(nameof(serviceAccountCredentials));
             if (string.IsNullOrWhiteSpace(baseUri)) { throw new ArgumentNullException(nameof(baseUri)); }
             this.scopes = scopes ?? throw new ArgumentNullException(nameof(scopes));
@@ -29,22 +26,18 @@ namespace TransparentApiClient.Google.Core
             this.baseUri = baseUri;
         }
 
-        protected Task<HttpResponseMessage> SendAsync(HttpMethod httpMethod, string partialUri, object requestBodyObject = null, JsonSerializerSettings settings = null, CancellationToken cancellationToken = default(CancellationToken))
-        {
+        protected Task<HttpResponseMessage> SendAsync(HttpMethod httpMethod, string partialUri, object requestBodyObject = null, JsonSerializerSettings settings = null, CancellationToken cancellationToken = default(CancellationToken)) {
 
             var _httpClient = GetHttpClient();
 
             var request = new HttpRequestMessage() { RequestUri = new Uri($"{baseUri}{partialUri}"), Method = httpMethod };
             request.Headers.AcceptEncoding.Add(new StringWithQualityHeaderValue("gzip"));
 
-            if (requestBodyObject != null)
-            {
+            if (requestBodyObject != null) {
                 byte[] compressedBodyBytes;
-                using (var memoryStream = new System.IO.MemoryStream())
-                {
+                using (var memoryStream = new System.IO.MemoryStream()) {
                     var requestBodyObjectBytes = System.Text.Encoding.UTF8.GetBytes(JsonConvert.SerializeObject(requestBodyObject, Formatting.None, settings));
-                    using (var zipStream = new System.IO.Compression.GZipStream(memoryStream, System.IO.Compression.CompressionMode.Compress))
-                    {
+                    using (var zipStream = new System.IO.Compression.GZipStream(memoryStream, System.IO.Compression.CompressionMode.Compress)) {
                         zipStream.Write(requestBodyObjectBytes, 0, requestBodyObjectBytes.Length);
                     }
                     compressedBodyBytes = memoryStream.ToArray();
@@ -58,25 +51,21 @@ namespace TransparentApiClient.Google.Core
             return _httpClient.SendAsync(request, cancellationToken);
         }
 
-        protected Task<BaseResponse<T>> HandleBaseResponse<T>(Task<HttpResponseMessage> sendTask)
-        {
+        protected Task<BaseResponse<T>> HandleBaseResponse<T>(Task<HttpResponseMessage> sendTask) {
 
             var response = sendTask.Result;
 
             var baseResponse = new BaseResponse<T>() { Success = false };
             baseResponse.ResponseCode = response.StatusCode;
             baseResponse.Success = response.IsSuccessStatusCode;
-            if (response.Content.Headers.ContentEncoding.Contains("gzip"))
-            {
+            if (response.Content.Headers.ContentEncoding.Contains("gzip")) {
 
                 return response.Content.ReadAsByteArrayAsync()
-                    .ContinueWith((readAsByteArrayTask) =>
-                    {
+                    .ContinueWith((readAsByteArrayTask) => {
                         byte[] resultByteArray = readAsByteArrayTask.Result;
 
                         var memoryStream = new MemoryStream();
-                        using (var zipStream = new System.IO.Compression.GZipStream(new MemoryStream(resultByteArray), System.IO.Compression.CompressionMode.Decompress))
-                        {
+                        using (var zipStream = new System.IO.Compression.GZipStream(new MemoryStream(resultByteArray), System.IO.Compression.CompressionMode.Decompress)) {
                             zipStream.CopyTo(memoryStream);
                         }
 
@@ -85,12 +74,9 @@ namespace TransparentApiClient.Google.Core
                     });
 
 
-            }
-            else
-            {
+            } else {
                 return response.Content.ReadAsStringAsync()
-                    .ContinueWith((readTask) =>
-                    {
+                    .ContinueWith((readTask) => {
 
                         string responseBody = readTask.Result;
                         return GetResponse(baseResponse, responseBody);
@@ -100,20 +86,13 @@ namespace TransparentApiClient.Google.Core
             }
         }
 
-        private static BaseResponse<T> GetResponse<T>(BaseResponse<T> baseResponse, string responseBody)
-        {
-            if (baseResponse.Success)
-            {
+        private static BaseResponse<T> GetResponse<T>(BaseResponse<T> baseResponse, string responseBody) {
+            if (baseResponse.Success) {
                 baseResponse.Response = JsonConvert.DeserializeObject<T>(responseBody);
-            }
-            else
-            {
-                try
-                {
+            } else {
+                try {
                     baseResponse.Error = JsonConvert.DeserializeObject<ErrorSuper>(responseBody).error;
-                }
-                catch (Exception)
-                {
+                } catch (Exception) {
                     baseResponse.ErrorText = responseBody;
                 }
             }
@@ -121,13 +100,11 @@ namespace TransparentApiClient.Google.Core
             return baseResponse;
         }
 
-        private class ErrorSuper
-        {
+        private class ErrorSuper {
             public ErrorResponse error { get; set; }
         }
 
-        protected string GetQueryString(object parameters)
-        {
+        protected string GetQueryString(object parameters) {
 
             var queryParameters = from c in parameters.GetType().GetProperties()
                                   let value = c.GetValue(parameters)
@@ -139,8 +116,7 @@ namespace TransparentApiClient.Google.Core
         }
 
         DateTime t1 = DateTime.UtcNow;
-        private HttpClient GetHttpClient()
-        {
+        private HttpClient GetHttpClient() {
             if ((DateTime.UtcNow - t1).TotalHours > 1)//get new http client and new credentials every hour
             {
                 httpClient.Dispose();
@@ -148,8 +124,7 @@ namespace TransparentApiClient.Google.Core
                 t1 = DateTime.UtcNow;
             }
 
-            if (httpClient == null)
-            {
+            if (httpClient == null) {
                 var googleCredential = GoogleCredential.FromStream(new System.IO.MemoryStream(serviceAccountCredentials)).CreateScoped(scopes);
                 var accessToken = googleCredential.UnderlyingCredential.GetAccessTokenForRequestAsync().Result;
 
@@ -159,8 +134,7 @@ namespace TransparentApiClient.Google.Core
             return httpClient;
         }
 
-        void IDisposable.Dispose()
-        {
+        void IDisposable.Dispose() {
             httpClient?.Dispose();
         }
 
