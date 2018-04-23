@@ -120,20 +120,25 @@ namespace TransparentApiClient.Google.SchemasFileGenerator {
             var methodBuilder = new StringBuilder($"\t\tpublic Task<BaseResponse<{responseClass}>> {methodName}Async({parameters}) {{{newLine}");
 
             //validation
-            foreach (var param in method.parameters.Where(c => c.Value.required)) {
-                if (param.Value.type.ToLower() == "string") {
-                    methodBuilder.AppendLine($"\t\t\tif (string.IsNullOrWhiteSpace({param.Key})) {{ throw new ArgumentNullException(nameof({param.Key})); }}");
-                } else {
-                    System.Diagnostics.Debugger.Break();
+            if (method.parameters != null) {
+                foreach (var param in method.parameters.Where(c => c.Value.required)) {
+                    if (param.Value.type.ToLower() == "string") {
+                        methodBuilder.AppendLine($"\t\t\tif (string.IsNullOrWhiteSpace({param.Key})) {{ throw new ArgumentNullException(nameof({param.Key})); }}");
+                    } else {
+                        System.Diagnostics.Debugger.Break();
+                    }
                 }
             }
 
             //queryBuilder
             var queryStringOnPath = string.Empty;
-            var qQueryParameters = method.parameters.Where(c => c.Value.location == "query");
-            if (qQueryParameters.Any()) {
-                methodBuilder.AppendLine($"{newLine}\t\t\tstring queryString = GetQueryString(new {{{string.Join(", ", qQueryParameters.Select(c => c.Key))}}});");
-                queryStringOnPath = "?{queryString}";
+            if (method.parameters != null) {
+                var qQueryParameters = method.parameters.Where(c => c.Value.location == "query");
+                if (qQueryParameters.Any())
+                {
+                    methodBuilder.AppendLine($"{newLine}\t\t\tstring queryString = GetQueryString(new {{{string.Join(", ", qQueryParameters.Select(c => c.Key))}}});");
+                    queryStringOnPath = "?{queryString}";
+                }
             }
 
             //remaining function body
@@ -151,11 +156,13 @@ namespace TransparentApiClient.Google.SchemasFileGenerator {
                 string[] descriptionLines = GetMultipleLines(method.description);
 
                 description.AppendLine($"\t\t/// <summary>{newLine}\t\t/// {string.Join($"{newLine}\t\t///", descriptionLines)}{newLine}\t\t/// </summary>");
-                foreach (var item in method.parameters.Where(c => c.Value.location == "path")) {
-                    description.AppendLine($"\t\t/// <param name=\"{item.Key}\">{string.Join($"{newLine}\t\t///", GetMultipleLines(item.Value.description))}</param>");
-                }
-                foreach (var item in method.parameters.Where(c => c.Value.location != "path")) {
-                    description.AppendLine($"\t\t/// <param name=\"{item.Key}\">{string.Join($"{newLine}\t\t///", GetMultipleLines(item.Value.description))}</param>");
+                if (method.parameters != null) {
+                    foreach (var item in method.parameters.Where(c => c.Value.location == "path")) {
+                        description.AppendLine($"\t\t/// <param name=\"{item.Key}\">{string.Join($"{newLine}\t\t///", GetMultipleLines(item.Value.description))}</param>");
+                    }
+                    foreach (var item in method.parameters.Where(c => c.Value.location != "path")) {
+                        description.AppendLine($"\t\t/// <param name=\"{item.Key}\">{string.Join($"{newLine}\t\t///", GetMultipleLines(item.Value.description))}</param>");
+                    }
                 }
             }
 
@@ -181,16 +188,18 @@ namespace TransparentApiClient.Google.SchemasFileGenerator {
         }
 
         private IEnumerable<string> GetFunctionParameters(Dictionary<string, GoogleApiDiscoverMethodParameter> parameters) {
-            foreach (var param in parameters.Where(c => c.Value.location == "path")) {
-                yield return $"{ToCSType(param.Value.type)} {param.Key}";
-            }
-            foreach (var param in parameters.Where(c => c.Value.location != "path")) {
-                var nullableString = string.Empty;
-                if (!param.Value.required) {
-                    var optionalPossible = (!new string[] { "string", "array", "object" }.Contains(param.Value.type));
-                    if (optionalPossible) { nullableString = "?"; }
+            if (parameters != null) {
+                foreach (var param in parameters.Where(c => c.Value.location == "path")) {
+                    yield return $"{ToCSType(param.Value.type)} {param.Key}";
                 }
-                yield return $"{ToCSType(param.Value.type)}{nullableString} {param.Key}";
+                foreach (var param in parameters.Where(c => c.Value.location != "path")) {
+                    var nullableString = string.Empty;
+                    if (!param.Value.required) {
+                        var optionalPossible = (!new string[] { "string", "array", "object" }.Contains(param.Value.type));
+                        if (optionalPossible) { nullableString = "?"; }
+                    }
+                    yield return $"{ToCSType(param.Value.type)}{nullableString} {param.Key}";
+                }
             }
         }
 
