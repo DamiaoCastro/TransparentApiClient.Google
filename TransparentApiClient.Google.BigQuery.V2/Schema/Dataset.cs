@@ -13,6 +13,7 @@ namespace TransparentApiClient.Google.BigQuery.V2.Schema {
 		/// <summary>
 		/// [Output-only] The time when this dataset was created, in milliseconds since the epoch.
 		/// </summary>
+		[JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
 		public string creationTime { get; set; }
 
 		/// <summary>
@@ -35,6 +36,7 @@ namespace TransparentApiClient.Google.BigQuery.V2.Schema {
 		/// <summary>
 		/// [Output-only] A hash of the resource.
 		/// </summary>
+		[JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
 		public string etag { get; set; }
 
 		/// <summary>
@@ -46,11 +48,13 @@ namespace TransparentApiClient.Google.BigQuery.V2.Schema {
 		/// <summary>
 		/// [Output-only] The fully-qualified unique name of the dataset in the format projectId:datasetId. The dataset name without the project name is given in the datasetId field. When creating a new dataset, leave this field blank, and instead specify the datasetId field.
 		/// </summary>
+		[JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
 		public string id { get; set; }
 
 		/// <summary>
 		/// [Output-only] The resource type.
 		/// </summary>
+		[JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
 		public string kind { get; set; } = "bigquery#dataset";
 
 		/// <summary>
@@ -61,6 +65,7 @@ namespace TransparentApiClient.Google.BigQuery.V2.Schema {
 		/// <summary>
 		/// [Output-only] The date when this dataset or any of its tables was last modified, in milliseconds since the epoch.
 		/// </summary>
+		[JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
 		public string lastModifiedTime { get; set; }
 
 		/// <summary>
@@ -71,6 +76,7 @@ namespace TransparentApiClient.Google.BigQuery.V2.Schema {
 		/// <summary>
 		/// [Output-only] A URL that can be used to access the resource again. You can use this URL in Get or Update requests to the resource.
 		/// </summary>
+		[JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
 		public string selfLink { get; set; }
 
 	public class Access { 

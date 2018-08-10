@@ -12,11 +12,13 @@ namespace TransparentApiClient.Google.BigQuery.V2.Schema {
 		/// <summary>
 		/// [Output-only] A hash of this resource.
 		/// </summary>
+		[JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
 		public string etag { get; set; }
 
 		/// <summary>
 		/// [Output-only] Opaque ID field of the job
 		/// </summary>
+		[JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
 		public string id { get; set; }
 
 		/// <summary>
@@ -28,11 +30,13 @@ namespace TransparentApiClient.Google.BigQuery.V2.Schema {
 		/// <summary>
 		/// [Output-only] The type of the resource.
 		/// </summary>
-		public string kind { get; set; } = "bigquery#job";
+		[JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+		public string kind { get; set; }
 
 		/// <summary>
 		/// [Output-only] A URL that can be used to access this resource again.
 		/// </summary>
+		[JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
 		public string selfLink { get; set; }
 
 		/// <summary>
@@ -43,11 +47,13 @@ namespace TransparentApiClient.Google.BigQuery.V2.Schema {
 		/// <summary>
 		/// [Output-only] The status of this job. Examine this value when polling an asynchronous job to see if the job is complete.
 		/// </summary>
+		[JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
 		public JobStatus status { get; set; }
 
 		/// <summary>
 		/// [Output-only] Email address of the user who ran the job.
 		/// </summary>
+		[JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
 		public string user_email { get; set; }
 
 	}

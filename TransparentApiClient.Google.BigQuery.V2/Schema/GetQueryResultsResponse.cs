@@ -12,6 +12,7 @@ namespace TransparentApiClient.Google.BigQuery.V2.Schema {
 		/// <summary>
 		/// [Output-only] The first errors or warnings encountered during the running of the job. The final message includes the number of errors that caused the process to stop. Errors here do not necessarily mean that the job has completed or was unsuccessful.
 		/// </summary>
+		[JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
 		public IEnumerable<ErrorProto> errors { get; set; }
 
 		/// <summary>
@@ -37,6 +38,7 @@ namespace TransparentApiClient.Google.BigQuery.V2.Schema {
 		/// <summary>
 		/// [Output-only] The number of rows affected by a DML statement. Present only for DML statements INSERT, UPDATE or DELETE.
 		/// </summary>
+		[JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
 		public string numDmlAffectedRows { get; set; }
 
 		/// <summary>

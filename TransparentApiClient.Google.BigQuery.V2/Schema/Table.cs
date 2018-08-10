@@ -7,6 +7,7 @@ namespace TransparentApiClient.Google.BigQuery.V2.Schema {
 		/// <summary>
 		/// [Output-only] The time when this table was created, in milliseconds since the epoch.
 		/// </summary>
+		[JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
 		public string creationTime { get; set; }
 
 		/// <summary>
@@ -23,6 +24,7 @@ namespace TransparentApiClient.Google.BigQuery.V2.Schema {
 		/// <summary>
 		/// [Output-only] A hash of this resource.
 		/// </summary>
+		[JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
 		public string etag { get; set; }
 
 		/// <summary>
@@ -46,12 +48,14 @@ namespace TransparentApiClient.Google.BigQuery.V2.Schema {
 		/// <summary>
 		/// [Output-only] An opaque ID uniquely identifying the table.
 		/// </summary>
+		[JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
 		public string id { get; set; }
 
 		/// <summary>
 		/// [Output-only] The type of the resource.
 		/// </summary>
-		public string kind { get; set; } = "bigquery#table";
+		[JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+		public string kind { get; set; }
 
 		/// <summary>
 		/// The labels associated with this table. You can use these to organize and group your tables. Label keys and values can be no longer than 63 characters, can only contain lowercase letters, numeric characters, underscores and dashes. International characters are allowed. Label values are optional. Label keys must start with a letter and each label in the list must have a different key.
@@ -61,26 +65,31 @@ namespace TransparentApiClient.Google.BigQuery.V2.Schema {
 		/// <summary>
 		/// [Output-only] The time when this table was last modified, in milliseconds since the epoch.
 		/// </summary>
+		[JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
 		public string lastModifiedTime { get; set; }
 
 		/// <summary>
 		/// [Output-only] The geographic location where the table resides. This value is inherited from the dataset.
 		/// </summary>
+		[JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
 		public string location { get; set; }
 
 		/// <summary>
 		/// [Output-only] The size of this table in bytes, excluding any data in the streaming buffer.
 		/// </summary>
+		[JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
 		public string numBytes { get; set; }
 
 		/// <summary>
 		/// [Output-only] The number of bytes in the table that are considered "long-term storage".
 		/// </summary>
+		[JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
 		public string numLongTermBytes { get; set; }
 
 		/// <summary>
 		/// [Output-only] The number of rows of data in this table, excluding any data in the streaming buffer.
 		/// </summary>
+		[JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
 		public string numRows { get; set; }
 
 		/// <summary>
@@ -92,11 +101,13 @@ namespace TransparentApiClient.Google.BigQuery.V2.Schema {
 		/// <summary>
 		/// [Output-only] A URL that can be used to access this resource again.
 		/// </summary>
+		[JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
 		public string selfLink { get; set; }
 
 		/// <summary>
 		/// [Output-only] Contains information regarding this table's streaming buffer, if one is present. This field will be absent if the table is not being streamed to or if there is no data in the streaming buffer.
 		/// </summary>
+		[JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
 		public Streamingbuffer streamingBuffer { get; set; }
 
 		/// <summary>
@@ -112,6 +123,7 @@ namespace TransparentApiClient.Google.BigQuery.V2.Schema {
 		/// <summary>
 		/// [Output-only] Describes the table type. The following values are supported: TABLE: A normal BigQuery table. VIEW: A virtual table defined by a SQL query. EXTERNAL: A table that references data stored in an external storage system, such as Google Cloud Storage. The default value is TABLE.
 		/// </summary>
+		[JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
 		public string type { get; set; }
 
 		/// <summary>

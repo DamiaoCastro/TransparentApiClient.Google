@@ -59,6 +59,7 @@ namespace TransparentApiClient.Google.BigQuery.V2.Schema {
 		/// <summary>
 		/// [Output-only] Information about the job, including starting time and ending time of the job.
 		/// </summary>
+		[JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
 		public JobStatistics statistics { get; set; }
 
 		/// <summary>
