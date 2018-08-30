@@ -92,7 +92,7 @@ namespace TransparentApiClient.Google.BigQuery.V2.Resources {
 			if (string.IsNullOrWhiteSpace(projectId)) { throw new ArgumentNullException(nameof(projectId)); }
 			if (string.IsNullOrWhiteSpace(tableId)) { throw new ArgumentNullException(nameof(tableId)); }
 
-			return SendAsync(HttpMethod.Post, $"projects/{projectId}/datasets/{datasetId}/tables/{tableId}", Table, settings, cancellationToken)
+			return SendAsync(new HttpMethod("PATCH"), $"projects/{projectId}/datasets/{datasetId}/tables/{tableId}", Table, settings, cancellationToken)
 				.ContinueWith(HandleBaseResponse<Schema.Table>, cancellationToken)
 				.Unwrap();
 		}
