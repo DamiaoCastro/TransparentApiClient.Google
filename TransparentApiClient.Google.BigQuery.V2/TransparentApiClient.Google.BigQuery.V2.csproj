@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
-    <Version>0.0.7</Version>
+    <Version>0.0.8</Version>
     <Authors>Damiao Castro</Authors>
     <Company>fowet.com</Company>
     <PackageProjectUrl>https://github.com/DamiaoCastro/TransparentApiClient.Google</PackageProjectUrl>
@@ -13,11 +13,10 @@
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
-    <DocumentationFile></DocumentationFile>
+    <DocumentationFile>d:\github\TransparentApiClient.Google\TransparentApiClient.Google.BigQuery.V2\TransparentApiClient.Google.BigQuery.V2.xml</DocumentationFile>
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="Resources\" />
     <Folder Include="Schema\" />
   </ItemGroup>
 

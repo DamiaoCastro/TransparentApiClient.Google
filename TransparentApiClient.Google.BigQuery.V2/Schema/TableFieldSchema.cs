@@ -32,17 +32,5 @@ namespace TransparentApiClient.Google.BigQuery.V2.Schema {
 		/// </summary>
 		public string type { get; set; }
 
-        /// <summary>
-        /// undocumented property
-        /// </summary>
-		[JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
-        public string encrypt { get; set; }
-        
-        /// <summary>
-        /// undocumented property
-        /// </summary>
-        [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
-        public string searchwords_separator { get; set; }
-        
     }
 }

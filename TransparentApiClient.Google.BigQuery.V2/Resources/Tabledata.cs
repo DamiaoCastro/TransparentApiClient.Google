@@ -5,22 +5,25 @@ using System.Threading.Tasks;
 using Newtonsoft.Json;
 using TransparentApiClient.Google.Core;
 
-namespace TransparentApiClient.Google.BigQuery.V2.Resources { 
+namespace TransparentApiClient.Google.BigQuery.V2.Resources {
 
-	public class Tabledata : BaseClient {
+    /// <summary>
+    /// Tabledata is used to return a slice of rows from a specified table. All columns are returned. Each row is actually a Tabledata resource; to get a slice of rows, you call bigquery.tabledata.list(). Specify a zero-based start row and a number of rows to retrieve in the list() request. Results are paged if the number of rows exceeds the maximum for a single page of data. The column order will be the order specified by the table schema.
+    /// For a list of methods for this resource, see the end of this page https://cloud.google.com/bigquery/docs/reference/rest/v2/tabledata.
+    /// </summary>
+    public class Tabledata : BaseClient, ITabledata
+    {
 
-		public Tabledata(byte[] serviceAccountCredentials)
+        /// <summary>
+        /// constructor with mandatory serviceAccountCredentials
+        /// </summary>
+        /// <param name="serviceAccountCredentials"></param>
+        public Tabledata(byte[] serviceAccountCredentials)
 		    : base(serviceAccountCredentials, "https://www.googleapis.com/bigquery/v2/",
 		    		new string[] {"https://www.googleapis.com/auth/bigquery","https://www.googleapis.com/auth/bigquery.insertdata","https://www.googleapis.com/auth/cloud-platform","https://www.googleapis.com/auth/cloud-platform.read-only"}) {
 		}
-
-		/// <summary>
-		/// Streams data into BigQuery one record at a time without needing to run a load job. Requires the WRITER dataset role.
-		/// </summary>
-		/// <param name="datasetId">Dataset ID of the destination table.</param>
-		/// <param name="projectId">Project ID of the destination table.</param>
-		/// <param name="tableId">Table ID of the destination table.</param>
-		public Task<BaseResponse<Schema.TableDataInsertAllResponse>> InsertAllAsync(string datasetId, string projectId, string tableId, Schema.TableDataInsertAllRequest TableDataInsertAllRequest, JsonSerializerSettings settings = null, CancellationToken cancellationToken = default(CancellationToken)) {
+        		
+		Task<BaseResponse<Schema.TableDataInsertAllResponse>> ITabledata.InsertAllAsync(string datasetId, string projectId, string tableId, Schema.TableDataInsertAllRequest TableDataInsertAllRequest, JsonSerializerSettings settings, CancellationToken cancellationToken) {
 			if (string.IsNullOrWhiteSpace(datasetId)) { throw new ArgumentNullException(nameof(datasetId)); }
 			if (string.IsNullOrWhiteSpace(projectId)) { throw new ArgumentNullException(nameof(projectId)); }
 			if (string.IsNullOrWhiteSpace(tableId)) { throw new ArgumentNullException(nameof(tableId)); }
@@ -30,17 +33,7 @@ namespace TransparentApiClient.Google.BigQuery.V2.Resources {
 				.Unwrap();
 		}
 
-		/// <summary>
-		/// Retrieves table data from a specified set of rows. Requires the READER dataset role.
-		/// </summary>
-		/// <param name="datasetId">Dataset ID of the table to read</param>
-		/// <param name="projectId">Project ID of the table to read</param>
-		/// <param name="tableId">Table ID of the table to read</param>
-		/// <param name="maxResults">Maximum number of results to return</param>
-		/// <param name="pageToken">Page token, returned by a previous call, identifying the result set</param>
-		/// <param name="selectedFields">List of fields to return (comma-separated). If unspecified, all fields are returned</param>
-		/// <param name="startIndex">Zero-based index of the starting row to read</param>
-		public Task<BaseResponse<Schema.TableDataList>> ListAsync(string datasetId, string projectId, string tableId, int? maxResults, string pageToken, string selectedFields, string startIndex, JsonSerializerSettings settings = null, CancellationToken cancellationToken = default(CancellationToken)) {
+		Task<BaseResponse<Schema.TableDataList>> ITabledata.ListAsync(string datasetId, string projectId, string tableId, int? maxResults, string pageToken, string selectedFields, string startIndex, JsonSerializerSettings settings, CancellationToken cancellationToken) {
 			if (string.IsNullOrWhiteSpace(datasetId)) { throw new ArgumentNullException(nameof(datasetId)); }
 			if (string.IsNullOrWhiteSpace(projectId)) { throw new ArgumentNullException(nameof(projectId)); }
 			if (string.IsNullOrWhiteSpace(tableId)) { throw new ArgumentNullException(nameof(tableId)); }
