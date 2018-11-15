@@ -66,6 +66,19 @@ namespace TransparentApiClient.Google.SchemasFileGenerator {
                     }).Wait();
 
                     break;
+
+                case '4':
+
+                    Task.Run(() => {
+
+                        var url = "https://bigquerydatatransfer.googleapis.com/$discovery/rest?version=v1";
+                        var basePath = @"..\..\..\..\TransparentApiClient.Google.BigqueryDataTransfer.V1";
+                        var @namespace = "TransparentApiClient.Google.BigqueryDataTransfer.V1";
+                        WriteFiles(url, basePath, @namespace);
+
+                    }).Wait();
+
+                    break;
             }
 
             return known;
@@ -102,6 +115,7 @@ namespace TransparentApiClient.Google.SchemasFileGenerator {
             Console.WriteLine("1: BigQuery");
             Console.WriteLine("2: Gmail");
             Console.WriteLine("3: PubSub");
+            Console.WriteLine("4: BigqueryDataTransfer");
             Console.WriteLine("0: Exit");
             return Console.ReadKey();
         }
