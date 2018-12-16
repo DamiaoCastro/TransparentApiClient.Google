@@ -7,7 +7,7 @@ using TransparentApiClient.Google.Core;
 
 namespace TransparentApiClient.Google.PubSub.V1.Resources { 
 
-	public class Subscriptions : BaseClient {
+	public class Subscriptions : BaseClient, ISubscriptions {
 
 		public Subscriptions(byte[] serviceAccountCredentials)
 		    : base(serviceAccountCredentials, "https://pubsub.googleapis.com/",
