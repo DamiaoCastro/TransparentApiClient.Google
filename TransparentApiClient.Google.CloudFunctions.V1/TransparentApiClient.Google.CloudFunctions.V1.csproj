@@ -2,12 +2,14 @@
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
+    <Version>0.0.1-beta</Version>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <Authors>Damiao Castro</Authors>
+    <Description>Simple RESTfull API clients for Google PubSub product. For developers that want to avoid the weird implementation of Google's SDK for .net.</Description>
+    <PackageProjectUrl>https://github.com/DamiaoCastro/TransparentApiClient.Google</PackageProjectUrl>
+    <FileVersion>0.0.1</FileVersion>
+    <AssemblyVersion>0.0.1</AssemblyVersion>
   </PropertyGroup>
-
-  <ItemGroup>
-    <Folder Include="Schema\" />
-    <Folder Include="Resources\" />
-  </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\TransparentApiClient.Google.Core\TransparentApiClient.Google.Core.csproj" />

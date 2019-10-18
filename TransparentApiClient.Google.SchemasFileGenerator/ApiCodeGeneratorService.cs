@@ -22,6 +22,14 @@ namespace TransparentApiClient.Google.SchemasFileGenerator {
                     foreach (KeyValuePair<string, GoogleApiDiscoverResource> schemaProperty1 in schemaProperty.Value.resources) {
                         Console.WriteLine($"resources property '{schemaProperty1.Key}'");
 
+                        if (schemaProperty1.Value.resources != null) {
+                            foreach (KeyValuePair<string, GoogleApiDiscoverResource> schemaProperty2 in schemaProperty1.Value.resources) {
+                                Console.WriteLine($"resources property '{schemaProperty2.Key}'");
+
+                                yield return GetClassCodeString(googleApiDiscover, schemaProperty2);
+                            }
+                        }
+
                         yield return GetClassCodeString(googleApiDiscover, schemaProperty1);
                     }
                 }
