@@ -79,6 +79,19 @@ namespace TransparentApiClient.Google.SchemasFileGenerator {
                     }).Wait();
 
                     break;
+
+                case '5':
+
+                    Task.Run(() => {
+
+                        var url = "https://cloudfunctions.googleapis.com/$discovery/rest?version=v1";
+                        var basePath = @"..\..\..\..\TransparentApiClient.Google.CloudFunctions.V1";
+                        var @namespace = "TransparentApiClient.Google.CloudFunctions.V1";
+                        WriteFiles(url, basePath, @namespace);
+
+                    }).Wait();
+
+                    break;
             }
 
             return known;
@@ -116,22 +129,24 @@ namespace TransparentApiClient.Google.SchemasFileGenerator {
             Console.WriteLine("2: Gmail");
             Console.WriteLine("3: PubSub");
             Console.WriteLine("4: BigqueryDataTransfer");
+            Console.WriteLine("5: CloudFunctions");
             Console.WriteLine("0: Exit");
             return Console.ReadKey();
         }
 
-        static Task<GoogleApiDiscover> GetApiDiscover(string url) {
-            //HttpResponseMessage httpResponse;
-            //using (var httpClient = new HttpClient()) {
-            //    httpResponse = await httpClient.GetAsync(new Uri(url));
-            //}
+        static async Task<GoogleApiDiscover> GetApiDiscover(string url) {
+            HttpResponseMessage httpResponse;
+            using (var httpClient = new HttpClient()) {
+                httpResponse = await httpClient.GetAsync(new Uri(url));
+            }
 
-            //string responseContent = await httpResponse.Content.ReadAsStringAsync();
-            string responseContent = System.IO.File.ReadAllText("pubsub-api.json");
+            string responseContent = await httpResponse.Content.ReadAsStringAsync();
+            //string responseContent = System.IO.File.ReadAllText("pubsub-api.json");
             GoogleApiDiscover googleApiDiscover = JsonConvert.DeserializeObject<GoogleApiDiscover>(responseContent,
                 new JsonSerializerSettings() { MetadataPropertyHandling = MetadataPropertyHandling.Ignore });
-            //return googleApiDiscover;
-            return Task.FromResult(googleApiDiscover);
+
+            return googleApiDiscover;
+            //return Task.FromResult(googleApiDiscover);
         }
 
     }
