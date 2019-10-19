@@ -1,11 +1,10 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
     <Version>0.0.4</Version>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <Authors>Damiao Castro</Authors>
-    <Company>fowet.com</Company>
     <Description>Simple RESTfull API clients for Google PubSub product. For developers that want to avoid the weird implementation of Google's SDK for .net.</Description>
     <PackageProjectUrl>https://github.com/DamiaoCastro/TransparentApiClient.Google</PackageProjectUrl>
     <FileVersion>0.0.4</FileVersion>

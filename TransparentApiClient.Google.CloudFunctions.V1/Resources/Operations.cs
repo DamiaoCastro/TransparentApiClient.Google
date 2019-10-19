@@ -26,13 +26,13 @@ namespace TransparentApiClient.Google.CloudFunctions.V1.Resources {
 		///collection id, however overriding users must ensure the name binding
 		///is the parent resource, without the operations collection id.
 		/// </summary>
+		/// <param name="pageSize">The maximum number of records that should be returned.<br> Requested page size cannot exceed 100. If not set, the default page size is 100.<br><br> Pagination is only supported when querying for a specific function.</param>
 		/// <param name="filter">Required. A filter for matching the requested operations.<br><br> The supported formats of <b>filter</b> are:<br> To query for a specific function: <code>project:*,location:*,function:*</code><br> To query for all of the latest operations for a project: <code>project:*,latest:true</code></param>
 		/// <param name="name">Must not be set.</param>
 		/// <param name="pageToken">Token identifying which result to start with, which is returned by a previous list call.<br><br> Pagination is only supported when querying for a specific function.</param>
-		/// <param name="pageSize">The maximum number of records that should be returned.<br> Requested page size cannot exceed 100. If not set, the default page size is 100.<br><br> Pagination is only supported when querying for a specific function.</param>
-		public Task<BaseResponse<Schema.ListOperationsResponse>> ListAsync(string filter, string name, string pageToken, int? pageSize, JsonSerializerSettings settings = null, CancellationToken cancellationToken = default(CancellationToken)) {
+		public Task<BaseResponse<Schema.ListOperationsResponse>> ListAsync(int? pageSize, string filter, string name, string pageToken, JsonSerializerSettings settings = null, CancellationToken cancellationToken = default(CancellationToken)) {
 
-			string queryString = GetQueryString(new {filter, name, pageToken, pageSize});
+			string queryString = GetQueryString(new {pageSize, filter, name, pageToken});
 
 			return SendAsync(HttpMethod.Get, $"v1/operations?{queryString}", null, settings, cancellationToken)
 				.ContinueWith(HandleBaseResponse<Schema.ListOperationsResponse>, cancellationToken)

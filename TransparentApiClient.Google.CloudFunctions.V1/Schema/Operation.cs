@@ -5,6 +5,13 @@ namespace TransparentApiClient.Google.CloudFunctions.V1.Schema {
 	public class Operation { 
 
 		/// <summary>
+		/// If the value is `false`, it means the operation is still in progress.
+		///If `true`, the operation is completed, and either `error` or `response` is
+		///available.
+		/// </summary>
+		public bool done { get; set; }
+
+		/// <summary>
 		/// The normal response of the operation in case of success.  If the original
 		///method returns no data on success, such as `Delete`, the response is
 		///`google.protobuf.Empty`.  If the original method is standard
@@ -35,13 +42,6 @@ namespace TransparentApiClient.Google.CloudFunctions.V1.Schema {
 		///long-running operation should document the metadata type, if any.
 		/// </summary>
 		public object metadata { get; set; }
-
-		/// <summary>
-		/// If the value is `false`, it means the operation is still in progress.
-		///If `true`, the operation is completed, and either `error` or `response` is
-		///available.
-		/// </summary>
-		public bool done { get; set; }
 
 	}
 }

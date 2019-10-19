@@ -5,6 +5,11 @@ namespace TransparentApiClient.Google.CloudFunctions.V1.Schema {
 	public class OperationMetadataV1 { 
 
 		/// <summary>
+		/// The last update timestamp of the operation.
+		/// </summary>
+		public string updateTime { get; set; }
+
+		/// <summary>
 		/// Target of the operation - for example
 		///projects/project-1/locations/region-1/functions/function-1
 		/// </summary>
@@ -25,11 +30,6 @@ namespace TransparentApiClient.Google.CloudFunctions.V1.Schema {
 		/// Type of operation.
 		/// </summary>
 		public string type { get; set; }
-
-		/// <summary>
-		/// The last update timestamp of the operation.
-		/// </summary>
-		public string updateTime { get; set; }
 
 	}
 }

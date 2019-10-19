@@ -5,13 +5,6 @@ namespace TransparentApiClient.Google.CloudFunctions.V1.Schema {
 	public class Policy { 
 
 		/// <summary>
-		/// Associates a list of `members` to a `role`. Optionally may specify a
-		///`condition` that determines when binding is in effect.
-		///`bindings` with no members will result in an error.
-		/// </summary>
-		public IEnumerable<Binding> bindings { get; set; }
-
-		/// <summary>
 		/// `etag` is used for optimistic concurrency control as a way to help
 		///prevent simultaneous updates of a policy from overwriting each other.
 		///It is strongly suggested that systems make use of the `etag` in the
@@ -48,6 +41,13 @@ namespace TransparentApiClient.Google.CloudFunctions.V1.Schema {
 		/// Specifies cloud audit logging configuration for this policy.
 		/// </summary>
 		public IEnumerable<AuditConfig> auditConfigs { get; set; }
+
+		/// <summary>
+		/// Associates a list of `members` to a `role`. Optionally may specify a
+		///`condition` that determines when binding is in effect.
+		///`bindings` with no members will result in an error.
+		/// </summary>
+		public IEnumerable<Binding> bindings { get; set; }
 
 	}
 }

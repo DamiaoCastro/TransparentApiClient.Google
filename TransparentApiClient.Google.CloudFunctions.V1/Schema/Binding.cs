@@ -5,20 +5,6 @@ namespace TransparentApiClient.Google.CloudFunctions.V1.Schema {
 	public class Binding { 
 
 		/// <summary>
-		/// Role that is assigned to `members`.
-		///For example, `roles/viewer`, `roles/editor`, or `roles/owner`.
-		/// </summary>
-		public string role { get; set; }
-
-		/// <summary>
-		/// The condition that is associated with this binding.
-		///NOTE: An unsatisfied condition will not allow user access via current
-		///binding. Different bindings, including their conditions, are examined
-		///independently.
-		/// </summary>
-		public Expr condition { get; set; }
-
-		/// <summary>
 		/// Specifies the identities requesting access for a Cloud Platform resource.
 		///`members` can have the following values:
 		///
@@ -45,6 +31,20 @@ namespace TransparentApiClient.Google.CloudFunctions.V1.Schema {
 		///
 		/// </summary>
 		public IEnumerable<object> members { get; set; }
+
+		/// <summary>
+		/// Role that is assigned to `members`.
+		///For example, `roles/viewer`, `roles/editor`, or `roles/owner`.
+		/// </summary>
+		public string role { get; set; }
+
+		/// <summary>
+		/// The condition that is associated with this binding.
+		///NOTE: An unsatisfied condition will not allow user access via current
+		///binding. Different bindings, including their conditions, are examined
+		///independently.
+		/// </summary>
+		public Expr condition { get; set; }
 
 	}
 }
